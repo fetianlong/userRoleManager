@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuedi.dao.UserSellerDao">    
+	<resultMap type="userSeller" id="userSellerResult">
+		<result property="id" column="ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="salerID" column="saler_ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="sellerID" column="seller_ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="userID" column="user_ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="IsDeleteFlag" column="IsDeleteFlag" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="createDateTime" column="CreateDateTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+	</resultMap>
+	<select id="findClientUserCount" parameterType="salerUserinfo"  resultType="java.lang.Long">
+		select COUNT(ID) from saler_usero2c u 
+		WHERE 1=1
+		<if test="params.salerId != null">
+			AND u.salerID = #{params.cardCode}
+		</if>
+		<if test="params.beginDateTime != null">
+			AND u.createDateTime &gt;= #{params.beginDateTime}
+		</if>
+		<if test="params.endDateTime != null">
+			AND u.createDateTime &lt; #{params.endDateTime}
+		</if>
+	</select>
+</mapper>

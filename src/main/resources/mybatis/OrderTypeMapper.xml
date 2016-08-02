@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.OrderTypeDao">
+	<resultMap id="orderTypeResultMap" type="com.yuedi.entity.OrderType">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="TINYINT" />
+	</resultMap>
+	<select id="selectOrderTypeByPrimaryKey" resultMap="orderTypeResultMap"
+		parameterType="java.lang.Integer">
+		select *
+		from yuedi_ordertype
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteOrderTypeByPrimaryKey" parameterType="java.lang.Integer">
+		delete from yuedi_ordertype
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insertOrderType" parameterType="com.yuedi.entity.OrderType"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into yuedi_ordertype ( name, type)
+		values (#{name,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT})
+	</insert>
+	<update id="updateOrderTypeByPrimaryKey" parameterType="com.yuedi.entity.OrderType">
+		update yuedi_ordertype
+		set name = #{name,jdbcType=VARCHAR},
+		type = #{type,jdbcType=TINYINT}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectOrderTypeLimit" resultMap="orderTypeResultMap">
+		select * from yuedi_orderType
+		WHERE 1=1
+		<if test="params.name != null">
+			AND name like #{params.name}
+		</if>
+		<if test="params.type != null">
+			AND type= #{params.type}
+		</if>
+	</select>
+	<select id="selectAllOrderType" resultMap="orderTypeResultMap">
+		select id,name from yuedi_orderType
+	</select>
+</mapper>

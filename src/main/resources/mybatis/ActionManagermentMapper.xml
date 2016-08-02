@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuedi.dao.ActionManagermentDao">    
+	<resultMap type="actionManagerment" id="actionManagermentResult">
+		<result property="id" column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+	    <result property="actionTitle" column="actionTitle" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="contacts" column="contacts" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="actionType" column="actionType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="state" column="state" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="location" column="location" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="accomplishResults" column="accomplishResults" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="isClose" column="isClose" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="sellerId" column="sellerId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+	    <result property="executorId" column="executorId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+	    <result property="executorName" column="executorName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="clientName" column="clientName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="beginDateTime" column="beginDateTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="endDateTime" column="endDateTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="spec" column="spec" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="businessOpportunityId" column="businessOpportunityId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="userInfoId" column="userInfoId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+	</resultMap>
+	<insert id="insertActionManagerment" parameterType="actionManagerment" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO action_management 
+			   (actionTitle, 
+				contacts,
+				actionType, 
+				state, 
+				location,
+				accomplishResults,
+				isClose,
+				sellerId, 
+				executorId,
+				executorName,
+				clientName, 
+				beginDateTime, 
+				endDateTime,
+				spec,
+				businessOpportunityId,
+				userInfoId
+				)
+		VALUES
+				(#{actionTitle}, 
+				#{contacts},
+				#{actionType}, 
+				#{state}, 
+				#{location}, 
+				#{accomplishResults}, 
+				#{isClose}, 
+				#{sellerId},
+				#{executorId}, 
+				#{executorName}, 
+				#{clientName},
+				#{beginDateTime},
+				#{endDateTime},
+				#{spec},
+				#{businessOpportunityId},
+				#{userInfoId}
+				)
+	</insert>
+	<update id="updateActionManagermenById"   parameterType="actionManagerment">
+	    UPDATE action_management SET actionTitle=#{actionTitle},contacts=#{contacts},actionType=#{actionType},
+	     state=#{state},location=#{location},accomplishResults=#{accomplishResults},isClose=#{isClose},executorId=#{executorId},
+	     executorName=#{executorName},clientName=#{clientName},beginDateTime=#{beginDateTime},endDateTime=#{endDateTime},
+	     spec=#{spec},businessOpportunityId=#{businessOpportunityId}
+	     WHERE id = #{id}
+	</update>
+	<delete id="deleteActionManagermentbyId" parameterType="Long">
+	    DELETE FROM action_management 
+		WHERE ID = #{id} ;
+	</delete>
+	<select id="selectActionManagermentById" parameterType="Long" resultMap="actionManagermentResult">
+	   Select 
+		t1.id,
+		t1.actionTitle,t1.contacts,t1.actionType,t1.state,t1.location,t1.accomplishResults,
+		t1.isClose,t1.sellerId,t1.executorId,t1.executorName,t1.clientName,t1.beginDateTime,
+		t1.endDateTime,t1.spec,t1.businessOpportunityId,t2.`Name` as 'sjname'
+		from action_management as t1 INNER JOIN seller as t2
+		on t1.SellerID=t2.ID
+		where t1.id=#{id} 
+	</select>
+	<select id="selectActionManagermentLimit" resultMap="actionManagermentResult">
+		Select 
+		t1.id,
+		t1.actionTitle,t1.contacts,t1.actionType,t1.state,t1.location,t1.accomplishResults,
+		t1.isClose,t1.sellerId,t1.executorId,t1.executorName,t1.clientName,t1.beginDateTime,
+		t1.endDateTime,t1.spec,t1.businessOpportunityId,t2.`Name` as 'sjname'
+		from action_management as t1 
+		INNER JOIN seller as t2 on t1.SellerID=t2.ID
+		<!-- INNER JOIN customerinfo as t3 on t1.clientId=t3.ID -->
+		WHERE 1=1
+		 <if test="params.sellerId != null">
+			AND t1.sellerID = #{params.sellerId}
+		</if>
+	    <if test="params.executorId != null">
+			AND t1.executorId = #{params.executorId}
+		</if>
+	  	<if test="params.actionTitle != null">
+			AND t1.actionTitle like  #{params.actionTitle}
+		</if>
+		 <if test="params.state != null">
+			AND t1.state =  #{params.state}
+		</if>
+		<if test="params.userInfoId != null">
+			AND t1.userInfoId = #{params.userInfoId}
+		</if>
+		order by t1.id desc
+	</select>
+</mapper>

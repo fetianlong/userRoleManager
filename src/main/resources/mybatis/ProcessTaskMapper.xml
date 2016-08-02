@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.workFlow.ProcessTaskDao" >
+  <resultMap id="TaskResultMap" type="com.yuedi.entity.workFlow.ProcessTask" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="process_id" property="processId" jdbcType="BIGINT" />
+    <result column="node_id" property="nodeId" jdbcType="BIGINT" />
+    <result column="form_id" property="formId" jdbcType="BIGINT" />
+    <result column="stauts" property="stauts" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Task_Column_List" >
+    id, process_id, node_id, form_id, stauts, create_time, create_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="TaskResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Task_Column_List" />
+    from process_task
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from process_task
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yuedi.entity.workFlow.ProcessTask" useGeneratedKeys="true" keyProperty="id">
+    insert into process_task (id, process_id, node_id, 
+      form_id, stauts, create_time, 
+      create_user)
+    values (#{id,jdbcType=BIGINT}, #{processId,jdbcType=BIGINT}, #{nodeId,jdbcType=BIGINT}, 
+      #{formId,jdbcType=BIGINT}, #{stauts,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuedi.entity.workFlow.ProcessTask" useGeneratedKeys="true" keyProperty="id">
+    insert into process_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="processId != null" >
+        process_id,
+      </if>
+      <if test="nodeId != null" >
+        node_id,
+      </if>
+      <if test="formId != null" >
+        form_id,
+      </if>
+      <if test="stauts != null" >
+        stauts,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="processId != null" >
+        #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="nodeId != null" >
+        #{nodeId,jdbcType=BIGINT},
+      </if>
+      <if test="formId != null" >
+        #{formId,jdbcType=BIGINT},
+      </if>
+      <if test="stauts != null" >
+        #{stauts,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuedi.entity.workFlow.ProcessTask" >
+    update process_task
+    <set >
+      <if test="processId != null" >
+        process_id = #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="nodeId != null" >
+        node_id = #{nodeId,jdbcType=BIGINT},
+      </if>
+      <if test="formId != null" >
+        form_id = #{formId,jdbcType=BIGINT},
+      </if>
+      <if test="stauts != null" >
+        stauts = #{stauts,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuedi.entity.workFlow.ProcessTask" >
+    update process_task
+    set process_id = #{processId,jdbcType=BIGINT},
+      node_id = #{nodeId,jdbcType=BIGINT},
+      form_id = #{formId,jdbcType=BIGINT},
+      stauts = #{stauts,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getProcessTask" resultMap="TaskResultMap" parameterType="com.yuedi.entity.workFlow.ProcessTask" >
+  	select 
+    <include refid="Task_Column_List" />
+    from process_task
+    where 1=1
+    <if test="formId != null">
+    	and form_id = #{formId}
+    </if>
+    <if test="nodeId != null">
+    	node_id = #{nodeId}
+    </if>
+    <if test="createUser != null">
+    	create_user = #{createUser}
+    </if>
+  </select>
+  
+  <select id="selectProcessTask" resultMap="TaskResultMap" parameterType="com.yuedi.entity.workFlow.ProcessTask" >
+  	select 
+    <include refid="Task_Column_List" />
+    from process_task
+    where 1=1
+    <if test="formId != null">
+    	and form_id = #{formId}
+    </if>
+    <if test="nodeId != null">
+    	node_id = #{nodeId}
+    </if>
+    <if test="createUser != null">
+    	create_user = #{createUser}
+    </if>
+  </select>
+</mapper>

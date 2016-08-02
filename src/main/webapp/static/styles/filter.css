@@ -1,0 +1,43 @@
+@CHARSET "UTF-8";
+
+
+
+a {
+	TEXT-DECORATION:none;
+}
+
+a:hover {
+	TEXT-DECORATION:underline;
+}
+
+
+.filter {
+	position: relative;
+	float: left;
+}
+
+.filter-div-default {
+	position: relative;
+	float: left;
+	heigth: 30px;
+	line-height: 30px;
+	vertical-align: middle;
+	text-align: center;
+	margin: 1px 1px;
+	padding: 5px;
+	min-width: 80px;
+	cursor: pointer;
+	background-color: #F4F4F4;
+}
+
+.filter-div-hover {
+	background-color: #C9C9C9;
+	padding: 5px;
+	min-width: 80px;
+}
+
+.filter-div-selected {
+	color: #FFFFFF;
+	background-color: #FF6600;
+}
+

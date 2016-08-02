@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuedi.dao.GestationInfoDao">
+	<resultMap type="gestationInfo"  id="gestationInfoResult">
+		<result property="id" column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="studentInfoId" column="StudentInfo_ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="lastMensesDate" column="LastMensesDate" jdbcType="DATE" javaType="java.util.Date"/>
+		<result property="mensesDays" column="MensesDays" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="expectedDate" column="ExpectedDate" jdbcType="DATE" javaType="java.util.Date"/>
+		<result property="rellyBornDate" column="RellyBornDate" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+		<result property="bodySize" column="BodySize" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="bornProvince" column="BornProvince" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="bornCity" column="BornCity" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="bornHospital" column="BornHospital" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="parturitionMode" column="ParturitionMode" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="otherSpecification" column="OtherSpecification" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="isDeleteFlag" column="IsDeleteFlag" jdbcType="BIT" javaType="java.lang.Boolean"/>
+		<result property="createrId" column="createrId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="createrName" column="createrName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="createDateTime" column="createDateTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+	</resultMap>
+	<insert id="insertGestationInfo" parameterType="gestationInfo" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+	<![CDATA[
+		INSERT INTO gestationinfo 
+			(StudentInfo_ID, 
+			LastMensesDate, 
+			MensesDays, 
+			ExpectedDate, 
+			RellyBornDate, 
+			BodySize, 
+			BornProvince, 
+			BornCity, 
+			BornHospital, 
+			ParturitionMode, 
+			OtherSpecification, 
+			CreaterId, 
+			CreaterName)
+		VALUES
+			(#{studentInfoId},
+			#{lastMensesDate},
+			#{mensesDays},
+			#{expectedDate},
+			#{rellyBornDate},
+			#{bodySize},
+			#{bornProvince},
+			#{bornCity},
+			#{bornHospital},
+			#{parturitionMode},
+			#{otherSpecification},
+			#{createrId},
+			#{createrName});
+	]]>
+	</insert>
+	<update id="updateGestationInfoById" parameterType="gestationInfo">
+	<![CDATA[
+		UPDATE gestationinfo SET
+			LastMensesDate = #{lastMensesDate}, 
+			MensesDays = #{mensesDays},
+			ExpectedDate = #{expectedDate}, 
+			RellyBornDate = #{rellyBornDate}, 
+			BodySize = #{bodySize}, 
+			BornProvince = #{bornProvince}, 
+			BornCity = #{bornCity}, 
+			BornHospital = #{bornHospital}, 
+			ParturitionMode = #{parturitionMode}, 
+			OtherSpecification = #{otherSpecification} 
+		WHERE ID = #{id}
+	]]>
+	</update>
+	<select id="selectGestationInfoById" parameterType="java.lang.Long" resultMap="gestationInfoResult">
+	<![CDATA[
+		SELECT 	ID, 
+			StudentInfo_ID, 
+			LastMensesDate, 
+			MensesDays, 
+			ExpectedDate, 
+			RellyBornDate, 
+			BodySize, 
+			BornProvince, 
+			BornCity, 
+			BornHospital, 
+			ParturitionMode, 
+			OtherSpecification, 
+			IsDeleteFlag, 
+			CreaterId, 
+			CreaterName, 
+			CreateDateTime
+		FROM 
+			gestationinfo 
+		WHERE ID = #{id}
+	]]>
+	</select>
+	<select id="selectGestationInfoByStudentInfoId" parameterType="java.lang.Long" resultMap="gestationInfoResult">
+	<![CDATA[
+		SELECT 	ID, 
+			StudentInfo_ID, 
+			LastMensesDate, 
+			MensesDays, 
+			ExpectedDate, 
+			RellyBornDate, 
+			BodySize, 
+			BornProvince, 
+			BornCity, 
+			BornHospital, 
+			ParturitionMode, 
+			OtherSpecification, 
+			IsDeleteFlag, 
+			CreaterId, 
+			CreaterName, 
+			CreateDateTime
+		FROM 
+			gestationinfo 
+		WHERE StudentInfo_ID = #{studentInfoId}
+		ORDER BY ExpectedDate DESC;
+	]]>
+	</select>
+</mapper>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuedi.dao.UserInfoDao">
+	<resultMap type="userInfo" id="userInfoResult">
+		<result property="id" column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="userName" column="userName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="pwd" column="pwd" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="salt" column="salt" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="state" column="state" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="email" column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="roleCategory" column="roleCategory" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="franchiseesId" column="Franchisees_ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="maces" column="maces" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="isDeleteFlag" column="isDeleteFlag" jdbcType="BIT" javaType="java.lang.Boolean"/>
+		<result property="createrId" column="createrId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="createrName" column="createrName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="createDateTime" column="createDateTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		
+		<result column="RealName" property="realname" jdbcType="VARCHAR" />
+	    <result column="Birthdate" property="birthdate" jdbcType="VARCHAR" />
+	    <result column="IDNumber" property="idnumber" jdbcType="VARCHAR" />
+	    <result column="sex" property="sex" jdbcType="INTEGER" />
+	    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+	    <result property="resetPwdFlag" column="resetPwdFlag" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<insert id="insertUserInfo" parameterType="userInfo" useGeneratedKeys="true" keyProperty="id">
+	    <![CDATA[
+	    	INSERT INTO userinfo (UserName, Email, State, Pwd, Salt, Franchisees_ID, maces, IsDeleteFlag, CreaterId, CreaterName, CreateDateTime, RealName, 
+		      Birthdate, IDNumber, sex, telephone, remark)
+			VALUES (#{userName}, #{email}, #{state}, #{pwd}, #{salt}, #{franchiseesId}, #{maces}, #{isDeleteFlag}, #{createrId}, #{createrName}, #{createDateTime}, #{realname,jdbcType=VARCHAR}, 
+		      #{birthdate,jdbcType=VARCHAR}, #{idnumber,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+		      #{telephone,jdbcType=VARCHAR},#{remark})
+	    ]]>
+	</insert>
+	<update id="updateUserInfo" parameterType="userInfo">
+		update userinfo
+    <set >
+      <if test="userName != null" >
+        UserName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        Email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        State = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="pwd != null" >
+        Pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleteFlag != null" >
+        IsDeleteFlag = #{isDeleteFlag,jdbcType=BIT},
+      </if>
+      <if test="createrId != null" >
+        CreaterId = #{createrId,jdbcType=BIGINT},
+      </if>
+      <if test="createrName != null" >
+        CreaterName = #{createrName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDateTime != null" >
+        CreateDateTime = #{createDateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roleCategory != null" >
+        RoleCategory = #{roleCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="franchiseesId != null" >
+        Franchisees_ID = #{franchiseesId,jdbcType=BIGINT},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="maces != null" >
+        maces = #{maces,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null" >
+        RealName = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="birthdate != null" >
+        Birthdate = #{birthdate,jdbcType=VARCHAR},
+      </if>
+      <if test="idnumber != null" >
+        IDNumber = #{idnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+		<!-- 
+	    UPDATE userinfo SET
+			Email = #{email}, Franchisees_ID = #{franchiseesId}, 
+			maces = #{maces}, roleCategory = #{roleCategory}
+		WHERE ID = #{id}
+		 -->
+	</update>
+	<update id="updateUserInfoStateById" parameterType="userInfo">
+	    UPDATE userinfo SET
+			State = #{state}
+		WHERE ID = #{id}
+	</update>
+	<update id="updatePwd" parameterType="userInfo">
+	    UPDATE userinfo SET
+			Pwd = #{pwd},  Salt = #{salt}, resetPwdFlag = #{resetPwdFlag}
+		WHERE ID = #{id}
+	</update>
+	<sql id="Base_Column_List" >
+	  ID, UserName, Email, State, Pwd, IsDeleteFlag, CreaterId, CreaterName, CreateDateTime, 
+	  RoleCategory, Franchisees_ID, UserType, salt, maces, RealName, Birthdate, IDNumber, 
+	  sex, telephone, remark, resetPwdFlag
+	</sql>
+	<select id="userLogin" parameterType="userInfo" resultMap="userInfoResult">
+	    select 
+	    <include refid="Base_Column_List"></include>
+	    <!-- ID, UserName, Email, State, Pwd, Salt, RoleCategory, Franchisees_ID, maces, roleCategory, 
+	    IsDeleteFlag, CreaterId, CreaterName, CreateDateTime  -->
+	    from userinfo
+	    where username=#{userName} and pwd=#{pwd}
+	</select>
+	<select id="selectAllUserInfo" parameterType="Long" resultMap="userInfoResult">
+	    select 
+	    <include refid="Base_Column_List"></include>
+	    <!-- ID, UserName, Email, State, Pwd, Salt, RoleCategory, Franchisees_ID, maces, roleCategory, 
+	    IsDeleteFlag, CreaterId, CreaterName, CreateDateTime  -->
+	    from userinfo where 1=1
+	    <!-- <if test="franchiseesId != null and franchiseesId != '' "> -->
+		   and Franchisees_ID = #{franchiseesId}
+	   <!--  </if> -->
+	</select>
+	<select id="getUserInfoById" parameterType="Long" resultMap="userInfoResult">
+	    select 
+	    <include refid="Base_Column_List"></include>
+	    <!-- ID, UserName, Email, State, Pwd, Salt, RoleCategory, Franchisees_ID, maces, roleCategory,
+	    IsDeleteFlag, CreaterId, CreaterName, CreateDateTime  -->
+	    from userinfo   
+	    where id=#{id}
+	</select>
+	<select id="selectUserInfoByUserName" parameterType="String" resultMap="userInfoResult">
+	    select 
+<!-- 	    <include refid="Base_Column_List"></include> -->
+	    t1.ID, t1.UserName, t1.Email, t1.State, t1.Pwd, t1.Salt, t1.RoleCategory, t1.Franchisees_ID, t1.maces, t1.roleCategory, 
+	    t1.IsDeleteFlag, t1.CreaterId, t1.CreaterName, t1.CreateDateTime,t2.name as franchiseesName
+	    from userinfo t1, seller t2  
+	    where t1.Franchisees_ID = t2.id and 
+	        t1.UserName = #{userName} and t1.State = 1
+	</select>
+	<select id="selectUserInfoByEmail" parameterType="String" resultMap="userInfoResult">
+	    select 
+	    <include refid="Base_Column_List"></include>
+	    <!-- ID, UserName, Email, State, Pwd, Salt, RoleCategory, Franchisees_ID, maces, roleCategory, 
+	    IsDeleteFlag, CreaterId, CreaterName, CreateDateTime  -->
+	    from userinfo   
+	    where Email = #{email}
+	</select>
+	<select id="selectUserInfoByCondition" parameterType="String" resultMap="userInfoResult">
+	    select 
+	    <include refid="Base_Column_List"></include>
+	    <!-- ID, UserName, Email, State, Pwd, Salt, RoleCategory, Franchisees_ID, maces, roleCategory, 
+	    IsDeleteFlag, CreaterId, CreaterName, CreateDateTime  -->
+	    from userInfo
+	    where username like CONCAT('%','${userName}','%' ) and Franchisees_ID = #{franchiseesId}
+<!-- 	    where username like #{condition}-->
+	</select>
+	
+	<select id="queryUserSaler" parameterType="java.lang.Long" resultMap="userInfoResult">
+		<![CDATA[
+			select u.id,u.userName,u.RealName from userinfo u WHERE u.Franchisees_ID=#{franchiseesId} 
+			and u.ID NOT IN (SELECT s.UseID from saler s where s.UseID <> 'NULL') and u.UserType <> 1
+		]]>
+	</select>
+	
+	<select id="queryUserBySellerId" parameterType="java.lang.Long" resultMap="userInfoResult">
+		<![CDATA[
+			select u.id,u.userName,u.RealName from userinfo u WHERE u.Franchisees_ID=#{franchiseesId} 
+		]]>
+	</select>
+	<select id="findTeacherBySellerId" parameterType="userInfo" resultMap="userInfoResult">
+		select u.id,u.userName,u.RealName from userinfo u left join role_userinfo r on u.id = r.userInfo_id where 1=1 
+		<if test="franchiseesId != null">
+			and u.Franchisees_ID = #{franchiseesId}
+		</if>
+		and r.role_id = 38
+	</select>
+	
+	<select id="selectUserInfoLimit" parameterType="MyPage" resultMap="userInfoResult">
+		select 
+	     u.ID, u.UserName, u.Email, u.State, u.Pwd, u.IsDeleteFlag,u.CreaterId, u.CreaterName, u.CreateDateTime, 
+		  u.RoleCategory, u.Franchisees_ID, u.UserType, u.salt, u.maces, u.RealName, u.Birthdate, u.IDNumber, 
+		  u.sex, u.telephone, u.remark, s.name as sellerName
+	    from userinfo u, Seller s
+	    <where>
+	    	u.Franchisees_ID = s.id
+	    	<if test="params.franchiseesId != null and params.franchiseesId != '' ">
+	    		and u.Franchisees_ID = #{params.franchiseesId}
+	    	</if>
+	    	<if test="params.sex != null and params.sex != '' ">
+	    		and u.sex = #{sex}
+	    	</if>
+	    	<if test="params.realname != null and params.realname != '' ">
+	    		and u.RealName like CONCAT('%','${params.realname}','%' ) 
+	    	</if>
+	    	<if test="params.userName != null and params.userName != '' ">
+	    		and u.UserName like #{params.userName}
+	    	</if>
+	    </where>
+	    order by u.Franchisees_ID
+	</select>
+	
+	<select id="selectUnassignUserByRoleId" parameterType="java.lang.Long" resultMap="userInfoResult">
+		SELECT t2.ID, t2.UserName, t2.resetPwdFlag, t3.Name AS franchiseesName
+			FROM userInfo t2 
+			LEFT JOIN seller t3 ON t3.ID = t2.Franchisees_ID
+			WHERE t2.UserType != 1 
+				AND t2.ID NOT IN (SELECT t1.UserInfo_ID FROM role_userinfo t1 WHERE t1.Role_ID = #{id})
+	    	order by franchiseesName
+	</select>
+	<select id="selectAssignUserByRoleId" parameterType="java.lang.Long" resultMap="userInfoResult">
+		<![CDATA[
+		    SELECT t1.ID, t1.Role_ID, t1.UserInfo_ID, t2.UserName, t3.Name AS franchiseesName
+			FROM role_userinfo t1
+			INNER JOIN userInfo t2 ON t2.ID = t1.UserInfo_ID
+			LEFT JOIN franchisees t3 ON t3.ID = t2.Franchisees_ID
+			WHERE t1.Role_ID = #{roleId} AND t2.UserType <> 1
+		]]>
+	</select>
+	<delete id="deleteUserInfo" parameterType="java.lang.Long">
+		delete from userinfo where id=#{id}
+	</delete>
+</mapper>

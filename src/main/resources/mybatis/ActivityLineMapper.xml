@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.ActivityLineDao">
+    <resultMap type="activityLine" id="activityLineResult">
+        <result column="ID" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="activityName" property="activityName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="activityType" property="activityType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="activityAddr" property="activityAddr" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="activityPurpose" property="activityPurpose" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="expectedTotalCost" property="expectedTotalCost" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+        <result column="expectedCluesNumber" property="expectedCluesNumber" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="sellerId" property="sellerId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="excutedId" property="excutedId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="excutedName" property="excutedName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result property="beginDateTime" column="beginDateTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="endDateTime" column="endDateTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="createDateTime" property="createDateTime" jdbcType="DATE" javaType="java.util.Date"/>
+        <result column="createName" property="createName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="updateDateTime" property="updateDateTime" jdbcType="DATE" javaType="java.util.Date"/>
+        <result column="updateName" property="updateName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="spec" property="spec" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result property="userInfoId" column="userInfoId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+    </resultMap>
+	<insert id="insertActivityLine" parameterType="activityLine" useGeneratedKeys="true" keyProperty="id">
+		    INSERT INTO activity_line
+		         (
+		              activityName
+		            , activityType
+		            , activityAddr
+		            , activityPurpose
+		            , expectedTotalCost
+		            , expectedCluesNumber
+		            , sellerId
+		            , excutedId
+		            , excutedName
+		            , beginDateTime
+		            , endDateTime
+		            , createDateTime
+		            , createName
+		            , updateDateTime
+		            , updateName
+		            , spec
+		            , userInfoId
+		         )
+		    VALUES (
+		           #{activityName}
+		         , #{activityType}
+		         , #{activityAddr}
+		         , #{activityPurpose}
+		         , #{expectedTotalCost}
+		         , #{expectedCluesNumber}
+		         , #{sellerId}
+		         , #{excutedId}
+		         , #{excutedName}
+		         , #{beginDateTime}
+		         , #{endDateTime}
+		         , #{createDateTime}
+		         , #{createName}
+		         , #{updateDateTime}
+		         , #{updateName}
+		         , #{spec}
+		         , #{userInfoId}
+		        )
+    </insert>
+	<select id="findListActivityLineByLimit" resultMap="activityLineResult">
+        SELECT 
+		t1.ID,
+		t1.activityName,t1.activityType,t1.activityAddr,t1.activityPurpose,t1.expectedTotalCost,t1.expectedCluesNumber,
+		t1.excutedId,t1.excutedName,t1.beginDateTime,t1.endDateTime,t1.createDateTime,t1.createName,t1.updateDateTime,t1.updateName,t1.spec,
+		t2.ID as 'sjid',t2.Area,t2.Authentication,t2.BusinessScope,t2.Category,t2.CharterCode,t2.CharterEffectiveDate,
+		t2.CharterExpiredDate,t2.City,t2.`Name` as 'sjname',t2.ObligationOrg,t2.OfficeAddr,t2.OrgCode,t2.Province,
+		t2.Tel as 'sjtel',t2.Remark,t2.RegAddr
+		FROM activity_line as t1 INNER JOIN seller as t2 on t1.sellerId=t2.ID
+		WHERE 1=1
+	    <if test="params.sellerId != null">
+			AND t1.sellerID = #{params.sellerId}
+		</if>
+	    <if test="params.activityName != null">
+			AND t1.activityName like #{params.activityName}
+		</if>
+		<if test="params.excutedId != null">
+			AND t1.excutedId =  #{params.excutedId}
+		</if>
+		<if test="params.beginDateTime != null">
+			AND t1.beginDateTime &gt;= #{params.beginDateTime}
+		</if>
+		<if test="params.endDateTime != null">
+			AND t1.endDateTime &lt;= #{params.endDateTime}
+		</if>
+		<if test="params.userInfoId != null">
+			AND t1.userInfoId = #{params.userInfoId}
+		</if>
+		order by t1.id desc
+    </select>
+    <select id="findActivityLineById" resultMap="activityLineResult" parameterType="java.lang.Long">
+        SELECT 
+		ID,
+		activityName,activityType,activityAddr,activityPurpose,expectedTotalCost,expectedCluesNumber,excutedId,
+		excutedName,beginDateTime,endDateTime,createDateTime,createName,updateDateTime,updateName,spec
+        FROM activity_line
+        WHERE ID = #{id}
+    </select>
+    <update id="updateActivityLine" parameterType="activityLine">
+    UPDATE activity_line
+    		SET 
+           activityName=#{activityName}
+         , activityType=#{activityType}
+         , activityAddr=#{activityAddr}
+         , activityPurpose=#{activityPurpose}
+         , expectedTotalCost=#{expectedTotalCost}
+         , expectedCluesNumber=#{expectedCluesNumber}
+         , sellerId=#{sellerId}
+         , excutedId=#{excutedId}
+         , excutedName=#{excutedName}
+         , beginDateTime=#{beginDateTime}
+         , endDateTime=#{endDateTime}
+         , createDateTime=#{createDateTime}
+         , createName=#{createName}
+         , updateDateTime=#{updateDateTime}
+         , updateName=#{updateName}
+         , spec=#{spec}
+	 WHERE ID = #{id}
+    </update>
+    <delete id="deleteActivityLineById" parameterType="java.lang.Long">
+        DELETE FROM activity_line
+        WHERE ID = #{id}
+    </delete>
+</mapper>

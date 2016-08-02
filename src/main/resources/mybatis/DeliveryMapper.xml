@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.fm.DeliveryDao" >
+  <resultMap id="deliveryResultMap" type="com.yuedi.entity.fm.Delivery" >
+	<id column="id" property="id" jdbcType="INTEGER" />
+    <result column="birth_process" property="birthProcess" jdbcType="INTEGER" />
+    <result column="cm" property="cm" jdbcType="INTEGER" />
+    <result column="is_pain" property="isPain" jdbcType="BIT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="time_long" property="timeLong" jdbcType="BIGINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="is_simulation" property="isSimulation" jdbcType="BIT" />
+    <result column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+    <result column="week" property="week" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="selectDeliveryByPrimaryKey" resultMap="deliveryResultMap"
+		parameterType="java.lang.Integer">
+		select *
+		from yuedi_fm_delivery
+		where id = #{id}
+	</select>
+	<delete id="deleteDeliveryByPrimaryKey" parameterType="java.lang.Integer">
+		delete from yuedi_fm_delivery
+		where id = #{id}
+	</delete>
+	<insert id="insertDelivery" parameterType="com.yuedi.entity.fm.Delivery"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into yuedi_fm_delivery (id, birth_process, cm, 
+	      is_pain, ctime, time_long, 
+	      create_user_id, is_simulation, hospital_id, 
+	      week)
+	    values (#{id,jdbcType=INTEGER}, #{birthProcess,jdbcType=INTEGER}, #{cm,jdbcType=INTEGER}, 
+	      #{isPain,jdbcType=BIT}, #{ctime,jdbcType=TIMESTAMP}, #{timeLong,jdbcType=BIGINT}, 
+	      #{createUserId,jdbcType=BIGINT}, #{isSimulation,jdbcType=TINYINT}, #{hospitalId,jdbcType=BIGINT}, 
+	      #{week,jdbcType=INTEGER})
+	</insert>
+	<update id="updateDeliveryByPrimaryKey" parameterType="com.yuedi.entity.fm.Delivery">
+		update yuedi_fm_delivery
+	    set birth_process = #{birthProcess,jdbcType=INTEGER},
+	      cm = #{cm,jdbcType=INTEGER},
+	      is_pain = #{isPain,jdbcType=BIT},
+	      ctime = #{ctime,jdbcType=TIMESTAMP},
+	      time_long = #{timeLong,jdbcType=BIGINT},
+	      create_user_id = #{createUserId,jdbcType=BIGINT},
+	      is_simulation = #{isSimulation,jdbcType=TINYINT},
+	      hospital_id = #{hospitalId,jdbcType=BIGINT},
+	      week = #{week,jdbcType=INTEGER}
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuedi.entity.fm.Delivery" >
+    update yuedi_fm_delivery
+    <set >
+      <if test="birthProcess != null" >
+        birth_process = #{birthProcess,jdbcType=INTEGER},
+      </if>
+      <if test="cm != null" >
+        cm = #{cm,jdbcType=INTEGER},
+      </if>
+      <if test="isPain != null" >
+        is_pain = #{isPain,jdbcType=BIT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeLong != null" >
+        time_long = #{timeLong,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="isSimulation != null" >
+        is_simulation = #{isSimulation,jdbcType=TINYINT},
+      </if>
+      <if test="hospitalId != null" >
+        hospital_id = #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="week != null" >
+        week = #{week,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+	<select id="selectDeliveryLimit" resultMap="deliveryResultMap">
+		select * from yuedi_fm_delivery
+		WHERE 1=1
+	</select>
+</mapper>

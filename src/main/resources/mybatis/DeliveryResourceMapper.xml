@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.fm.DeliveryResourceDao">
+	<resultMap id="deliveryResourceResultMap" type="com.yuedi.entity.fm.DeliveryResource">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<result column="Delivery_id" property="deliveryId" jdbcType="INTEGER" />
+		<result column="Resource_id" property="resourceId" jdbcType="INTEGER" />
+		<result column="Brand_ID" property="brandId" jdbcType="BIGINT" />
+		<result column="Series_ID" property="seriesId" jdbcType="BIGINT" />
+		<result column="tags" property="tags" jdbcType="VARCHAR" />
+		<result column="resourceCode" property="resourceCode" jdbcType="VARCHAR" />
+		<result column="displayName" property="displayName" jdbcType="VARCHAR" />
+		<result column="resourceType" property="resourceType" jdbcType="VARCHAR" />
+		<result column="resourceName" property="resourceName" jdbcType="VARCHAR" />
+		<result column="name" property="seriesName" jdbcType="VARCHAR" />
+		
+	</resultMap>
+	<select id="selectResourcebyDeliveryId" resultMap="deliveryResourceResultMap">
+		select o.id,ri.resourceName,ri.displayName,ri.tags,ri.resourceCode 
+		from yuedi_fm_deliveryResource o,resourceinfo ri
+		where ri.id=o.Resource_id  and o.delivery_id=#{params.deliveryId} and ri.Brand_ID=4 and ri.IsDeleteFlag=0
+		ORDER BY o.id DESC
+	</select>
+	
+	<delete id="deleteDeliveryResourceByPrimaryKey" parameterType="java.lang.Integer">
+		delete from yuedi_fm_deliveryResource
+		where id = #{id}
+	</delete>
+	<insert id="insertDeliveryResource" parameterType="com.yuedi.entity.fm.DeliveryResource"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into yuedi_fm_deliveryResource
+		(Delivery_id, Resource_id)
+		values (#{deliveryId}, #{resourceId})
+	</insert>
+	
+<!-- 	没有选中的资源 -->
+	 <select id="selectNoResourcebyDeliveryId" parameterType="com.yuedi.entity.fm.DeliveryResource" resultMap="deliveryResourceResultMap">
+		SELECT
+		r.id,r.resourceName,r.displayName,r.tags,r.resourceCode from
+		resourceInfo r
+		WHERE  r.Series_ID = #{seriesId}
+		AND r.resourceType =#{resourceType} 
+		AND r.Brand_ID = #{brandId}
+		AND r.IsDeleteFlag = 0
+		AND r.ID NOT IN (SELECT o.Resource_id from
+		 yuedi_fm_deliveryResource o where
+		 o.delivery_id=#{deliveryId})
+		ORDER BY r.ID DESC
+	</select>
+	
+<!-- 	显示所有资源 -->
+	 <select id="selectAppResourceInfo" parameterType="com.yuedi.entity.fm.DeliveryResource" resultMap="deliveryResourceResultMap">
+		SELECT
+		r.id,r.resourceName,r.displayName,r.tags,r.resourceCode from
+		resourceInfo r
+		WHERE  r.Series_ID = #{seriesId}
+		AND r.resourceType =#{resourceType} 
+		AND r.Brand_ID = #{brandId}
+		AND r.IsDeleteFlag = 0
+		
+		ORDER BY r.ID DESC
+	</select>
+	<select id="selectSeriesByBrandCategory" parameterType="com.yuedi.entity.fm.DeliveryResource" resultMap="deliveryResourceResultMap">
+		select id as Series_ID,name
+	    from series 
+	    where Brand_ID=#{brandId} and Category=#{resourceType}
+	</select>
+	
+</mapper>

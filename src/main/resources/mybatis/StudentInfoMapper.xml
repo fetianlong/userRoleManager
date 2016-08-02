@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuedi.dao.StudentInfoDao">
+	<resultMap type="studentInfoDto"  id="studentInfoDtoResult">
+		<result property="id" column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="name" column="Name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="nickName" column="NickName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="sex" column="Sex" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="customerInfoId" column="CustomerInfo_ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="customerInfoCode" column="CustomerInfo_Code" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="studentNo" column="StudentNo" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="franchiseesId" column="Franchisees_ID" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="entranceDate" column="EntranceDate" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="email" column="Email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="mobilePhone" column="MobilePhone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="fixedPhone" column="FixedPhone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="qqAccount" column="QQAccount" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="microChartAccount" column="MicroChartAccount" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="province" column="Province" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="city" column="City" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="district" column="District" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="specificationAddress" column="SpecificationAddress" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="contacts" column="Contacts" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="contactsPhone" column="ContactsPhone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="specification" column="Specification" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="saler" column="Saler" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="bornDate" column="bornDate" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="cardCode" column="cardCode" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="source" column="source" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="lastMensesDate" column="lastMensesDate" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="mensesDays" column="mensesDays" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="expectedDate" column="expectedDate" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="rellyBornDate" column="rellyBornDate" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="bodySize" column="bodySize" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="parturitionMode" column="parturitionMode" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="gestationInfoId" column="gestationInfoId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+	</resultMap>
+	<insert id="insertStudentInfo" keyColumn="id" keyProperty="id" useGeneratedKeys="true" parameterType="studentInfoDto">
+		INSERT INTO studentinfo 
+				(CustomerInfo_ID, 
+				CustomerInfo_Code, 
+				StudentNo, 
+				Franchisees_ID, 
+				EntranceDate, 
+				Email, 
+				MobilePhone, 
+				FixedPhone, 
+				QQAccount, 
+				MicroChartAccount, 
+				Province, 
+				City, 
+				District, 
+				SpecificationAddress, 
+				Contacts, 
+				ContactsPhone, 
+				Specification, 
+				Saler, 
+				CreaterId, 
+				CreaterName	
+				)
+			VALUES
+				(#{customerInfoId}, 
+				#{customerInfoCode}, 
+				#{studentNo}, 
+				#{franchiseesId}, 
+				#{entranceDate}, 
+				#{email}, 
+				#{mobilePhone}, 
+				#{fixedPhone}, 
+				#{qqAccount}, 
+				#{microChartAccount}, 
+				#{province}, 
+				#{city}, 
+				#{district}, 
+				#{specificationAddress}, 
+				#{contacts}, 
+				#{contactsPhone}, 
+				#{specification}, 
+				#{saler}, 
+				#{createrId}, 
+				#{createrName});
+	</insert>
+	<update id="updateStudentInfoById" parameterType="studentInfoDto">
+		UPDATE studentinfo 
+			SET
+				EntranceDate = #{entranceDate}, 
+				Email = #{email},
+				MobilePhone = #{mobilePhone}, 
+				FixedPhone = #{fixedPhone},
+				QQAccount = #{qqAccount},
+				MicroChartAccount = #{microChartAccount}, 
+				Province = #{province},
+				City = #{city}, 
+				District = #{district},
+				SpecificationAddress = #{specificationAddress}, 
+				Contacts = #{contacts},
+				ContactsPhone = #{contactsPhone},
+				Specification = #{specificationAddress},
+				Saler = #{saler}
+			WHERE
+				ID = #{id};
+	</update>
+	<select id="selectStudentInfoById" parameterType="java.lang.Long" resultMap="studentInfoDtoResult">
+		SELECT 	
+			t1.ID, t2.Name, t2.Nickname, t2.Sex,
+			t1.CustomerInfo_ID,  t1.CustomerInfo_Code, t1.StudentNo, 
+			t1.Franchisees_ID,  t1.EntranceDate, 	t1.Email, t1.MobilePhone, 
+			t1.FixedPhone,  t1.QQAccount, 	t1.MicroChartAccount, 
+			t1.Province, t1.City, t1.District, t1.SpecificationAddress, 
+			t1.Contacts, t1.ContactsPhone, 	t1.Specification, t1.Saler,
+			t1.Saler, t1.IsDeleteFlag, t2.BornDate, t2.CardCode,
+			t3.LastMensesDate, t3.MensesDays, t3.ExpectedDate,
+			t3.BodySize, t3.BornCity, t3.BornHospital, t3.BornProvince, t3.ParturitionMode, t3.ID AS gestationInfoId
+		FROM 
+			studentinfo t1
+		INNER JOIN CustomerInfo t2 ON t2.ID = t1.CustomerInfo_ID
+		INNER JOIN GestationInfo t3 ON t3.StudentInfo_ID = t1.ID
+		WHERE t1.ID = #{id}
+	</select>
+	<select id="selectStudentInfoByFranchiseesId" parameterType="java.lang.Long" resultMap="studentInfoDtoResult">
+		SELECT 	t1.ID, t2.Name, t2.Nickname, t2.Sex,
+			t1.CustomerInfo_ID,  t1.CustomerInfo_Code, t1.StudentNo, 
+			t1.Franchisees_ID,  t1.EntranceDate, 	t1.Email, t1.MobilePhone, 
+			t1.FixedPhone,  t1.QQAccount, 	t1.MicroChartAccount, 
+			t1.Province, t1.City, t1.District, t1.SpecificationAddress, 
+			t1.Contacts, t1.ContactsPhone, 	t1.Specification, t1.Saler,
+			t1.Saler, t1.IsDeleteFlag, t1.CreaterId, 
+			t1.CreaterName, 	t1.CreateDateTime
+		FROM 
+			studentinfo t1
+		INNER JOIN CustomerInfo t2 ON t2.ID = t1.CustomerInfo_ID
+		WHERE t1.Franchisees_ID = #{franchiseesId}
+		ORDER BY t1.StudentNo DESC
+	</select>
+	<select id="selectStudentInfoByLimit" resultMap="studentInfoDtoResult">
+        SELECT 	t1.ID, t2.Name, t2.Nickname, t2.Sex,t2.CardCode,
+			t1.CustomerInfo_ID,  t1.CustomerInfo_Code, t1.StudentNo, 
+			t1.Franchisees_ID,  t1.EntranceDate, 	t1.Email, t1.MobilePhone, 
+			t1.FixedPhone,  t1.QQAccount, 	t1.MicroChartAccount, 
+			t1.Province, t1.City, t1.District, t1.SpecificationAddress, 
+			t1.Contacts, t1.ContactsPhone, 	t1.Specification, t1.Saler,
+			t1.Saler, t1.IsDeleteFlag, t1.CreaterId, 
+			t1.CreaterName, t1.CreateDateTime,t3.name as sellerName
+		FROM 
+			studentinfo t1, CustomerInfo t2, seller t3
+		WHERE  t2.ID = t1.CustomerInfo_ID and t3.ID=t1.Franchisees_ID
+		<if test="params.franchiseesId != null">
+		 	and  t1.Franchisees_ID = #{params.franchiseesId}
+		</if>
+		<if test="params.name != null">
+			AND t2.Name like #{params.name}
+		</if>
+		<if test="params.customerCode != null">
+			AND t1.CustomerInfo_Code like #{params.customerCode}
+		</if>
+		<if test="params.qq != null">
+			AND t1.QQAccount like #{params.qq}
+		</if>
+		<if test="params.microChart != null">
+			AND t1.MicroChartAccount like #{params.microChart}
+		</if>
+		<if test="params.mobilePhone != null">
+			AND t1.MobilePhone like #{params.mobilePhone}
+		</if>
+		<choose>
+			<when test="params.startEntranceDate != null and params.endEntranceDate != null">
+				AND t1.EntranceDate BETWEEN #{params.startEntranceDate} AND #{params.endEntranceDate}
+			</when>
+			<when test="params.startEntranceDate != null and params.endEntranceDate == null">
+			<![CDATA[
+				AND t1.EntranceDate >= #{params.startEntranceDate}
+			]]>
+			</when>
+			<when test="params.startEntranceDate == null and params.endEntranceDate != null">
+			<![CDATA[
+				AND T1.EntranceDate <= #{params.endEntranceDate}
+			]]>
+			</when>
+		</choose>
+		ORDER BY t1.StudentNo DESC
+    </select>
+    <select id="selectStudentInfoTatolByStudentInfoPageDto" resultType="long">
+        SELECT COUNT(t1.ID) AS tatol
+		FROM 
+			studentinfo t1
+		INNER JOIN CustomerInfo t2 ON t2.ID = t1.CustomerInfo_ID
+		WHERE 1=1
+		<if test="franchiseesId != null">
+		 	and  t1.Franchisees_ID = #{franchiseesId}
+		</if>
+		<if test="name != null">
+			AND t2.Name like #{name}
+		</if>
+		<if test="customerCode != null">
+			AND t1.CustomerInfo_Code like #{customerCode}
+		</if>
+		<if test="qq != null">
+			AND t1.QQAccount like #{qq}
+		</if>
+		<if test="microChart != null">
+			AND t1.MicroChartAccount like #{microChart}
+		</if>
+		<if test="mobilePhone != null">
+			AND t1.MobilePhone like #{mobilePhone}
+		</if>
+		<choose>
+			<when test="startEntranceDate != null and endEntranceDate != null">
+				AND T1.EntranceDate BETWEEN #{startEntranceDate} AND #{endEntranceDate}
+			</when>
+			<when test="startEntranceDate != null and endEntranceDate == null">
+			<![CDATA[
+				AND T1.EntranceDate >= #{startEntranceDate}
+			]]>
+			</when>
+			<when test="startEntranceDate == null and endEntranceDate != null">
+			<![CDATA[
+				AND T1.EntranceDate <= #{endEntranceDate}
+			]]>
+			</when>
+		</choose>
+    </select>
+    
+    <select id="listUnassignStudent" parameterType="studentInfo" resultMap="studentInfoDtoResult">
+		SELECT s.ID,c.Name,c.CardCode from studentinfo s,customerinfo c 
+		WHERE s.CustomerInfo_ID=c.ID and c.IsStudent=1 and c.FranchiseesId=#{franchiseesId} 
+		AND s.ID NOT IN (select cs.StudentInfo_ID from classinfo_studentinfo cs where cs.ClassInfo_ID=#{id})
+	</select>
+	
+	<select id="listAssignStudent" parameterType="studentInfo" resultMap="studentInfoDtoResult">
+		SELECT s.ID,c.Name,c.CardCode from studentinfo s,customerinfo c 
+		WHERE s.CustomerInfo_ID=c.ID and c.IsStudent=1 and c.FranchiseesId=#{franchiseesId} 
+		AND s.ID IN (select cs.StudentInfo_ID from classinfo_studentinfo cs where cs.ClassInfo_ID=#{id})
+	</select>
+</mapper>

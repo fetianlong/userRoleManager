@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.fm.FeedBackDao" >
+  <resultMap id="BaseResultMap" type="com.yuedi.entity.fm.FeedBack" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="UserId" property="userid" jdbcType="BIGINT" />
+    <result column="Type" property="type" jdbcType="INTEGER" />
+    <result column="PainNum" property="painnum" jdbcType="INTEGER" />
+    <result column="PainTime" property="paintime" jdbcType="INTEGER" />
+    <result column="ProcessTime" property="processtime" jdbcType="INTEGER" />
+    <result column="Painratio" property="painratio" jdbcType="INTEGER" />
+    <result column="Ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="fm_time" property="fmTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    t.Id, t.UserId, t.Type, t.PainNum, t.PainTime, t.ProcessTime, t.Painratio, t.Ctime, t.fm_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yuedi_fm_feedback t
+    where t.Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yuedi_fm_feedback
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yuedi.entity.fm.FeedBack" useGeneratedKeys="true" keyProperty="id">
+    insert into yuedi_fm_feedback (Id, UserId, Type, 
+      PainNum, PainTime, ProcessTime, 
+      Painratio, Ctime, fm_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, 
+      #{painnum,jdbcType=INTEGER}, #{paintime,jdbcType=INTEGER}, #{processtime,jdbcType=INTEGER}, 
+      #{painratio,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{fmTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuedi.entity.fm.FeedBack" >
+    insert into yuedi_fm_feedback
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="userid != null" >
+        UserId,
+      </if>
+      <if test="type != null" >
+        Type,
+      </if>
+      <if test="painnum != null" >
+        PainNum,
+      </if>
+      <if test="paintime != null" >
+        PainTime,
+      </if>
+      <if test="processtime != null" >
+        ProcessTime,
+      </if>
+      <if test="painratio != null" >
+        Painratio,
+      </if>
+      <if test="ctime != null" >
+        Ctime,
+      </if>
+      <if test="fmTime != null" >
+        fm_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="painnum != null" >
+        #{painnum,jdbcType=INTEGER},
+      </if>
+      <if test="paintime != null" >
+        #{paintime,jdbcType=INTEGER},
+      </if>
+      <if test="processtime != null" >
+        #{processtime,jdbcType=INTEGER},
+      </if>
+      <if test="painratio != null" >
+        #{painratio,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fmTime != null" >
+        #{fmTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuedi.entity.fm.FeedBack" >
+    update yuedi_fm_feedback
+    <set >
+      <if test="userid != null" >
+        UserId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        Type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="painnum != null" >
+        PainNum = #{painnum,jdbcType=INTEGER},
+      </if>
+      <if test="paintime != null" >
+        PainTime = #{paintime,jdbcType=INTEGER},
+      </if>
+      <if test="processtime != null" >
+        ProcessTime = #{processtime,jdbcType=INTEGER},
+      </if>
+      <if test="painratio != null" >
+        Painratio = #{painratio,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        Ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fmTime != null" >
+        fm_time = #{fmTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuedi.entity.fm.FeedBack" >
+    update yuedi_fm_feedback
+    set UserId = #{userid,jdbcType=BIGINT},
+      Type = #{type,jdbcType=INTEGER},
+      PainNum = #{painnum,jdbcType=INTEGER},
+      PainTime = #{paintime,jdbcType=INTEGER},
+      ProcessTime = #{processtime,jdbcType=INTEGER},
+      Painratio = #{painratio,jdbcType=INTEGER},
+      Ctime = #{ctime,jdbcType=TIMESTAMP},
+      fm_time = #{fmTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectFeedBackLimit" resultMap="BaseResultMap" parameterType="MyPage">
+  select 
+    t.Id, t.UserId, t.Type, t.PainNum, t.PainTime, t.ProcessTime, t.Painratio, t.Ctime, t.fm_time,
+    u.Birthday,u.NickName as userName
+    from yuedi_fm_feedback t,userinfo2c u where u.id=t.UserId
+    <if test="params.fmType != null and params.fmType != ''">
+    and t.Type = ${params.fmType}
+    </if>
+    <if test="params.fmSTime != null and params.fmSTime != '' and params.fmETime != null and params.fmETime != '' ">
+    and t.fm_time between '${params.fmSTime}' and '${params.fmETime}'
+    </if>
+    <if test="params.painratio != null and params.painratio != ''">
+    and t.Painratio = ${params.painratio}
+    </if>
+  </select>
+</mapper>

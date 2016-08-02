@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.ContactPersonDao">
+	<resultMap id="contactPersonResultMap" type="com.yuedi.entity.ContactPerson">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="full_name" property="fullName" jdbcType="VARCHAR" />
+		<result column="businessType" property="businessType" jdbcType="VARCHAR" />
+		<result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+		<result column="son_seller_id" property="sonSellerId" jdbcType="BIGINT" />
+		<result column="seller_name" property="sellerName" jdbcType="VARCHAR" />
+		<result column="birthday" property="birthday" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="BIGINT" />
+		<result column="key_person" property="keyPerson" jdbcType="BIGINT" />
+		<result column="branch" property="branch" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		<result column="telephone" property="telephone" jdbcType="VARCHAR" />
+		<result column="instant_message" property="instantMessage"
+			jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="personal_website" property="personalWebsite"
+			jdbcType="VARCHAR" />
+		<result column="postal_code" property="postalCode" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="hobby" property="hobby" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="BIGINT" />
+		<result column="create_name" property="createName" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="BIGINT" />
+		<result column="update_name" property="updateName" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result property="userInfoId" column="userInfoId" jdbcType="BIGINT" javaType="java.lang.Long" />
+	</resultMap>
+
+	<select id="findListContactPersonByLimit" parameterType="com.yuedi.entity.ContactPerson"
+		resultMap="contactPersonResultMap">
+		SELECT *,s.`Name` as sellerName
+		FROM contact_person t
+		left join seller s on t.seller_id = s.id
+		<where>
+			1=1
+			<if test="params.fullName != null">
+				and t.full_name like #{params.fullName}
+			</if>
+			<if test="params.sellerId != null">
+				and t.seller_id = #{params.sellerId}
+			</if>
+			<if test="params.position != null">
+				and t.position like #{params.position}
+			</if>
+			<if test="params.telephone != null">
+				and t.telephone like #{params.telephone}
+			</if>
+			<if test="params.userInfoId != null">
+				and t.userInfoId = #{params.userInfoId}
+			</if>
+		</where>
+		ORDER BY t.id desc
+	</select>
+	
+	<select id="findBySellerId" parameterType="com.yuedi.entity.ContactPerson"
+		resultMap="contactPersonResultMap">
+		SELECT *
+		FROM contact_person where seller_id = #{sellerId}
+	</select>
+
+	<insert id="insertContactPerson" parameterType="com.yuedi.entity.ContactPerson"
+		keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		INSERT INTO contact_person
+		(
+		full_name
+		, seller_id
+		, businessType
+		, son_seller_id
+		, seller_name
+		, birthday
+		, sex
+		, key_person
+		, branch
+		, position
+		, telephone
+		, instant_message
+		, email
+		, personal_website
+		, postal_code
+		, address
+		, hobby
+		, remark
+		, create_user
+		, create_name
+		, create_time
+		, update_user
+		, update_name
+		, update_time
+		, userInfoId
+		)
+		VALUES (
+		#{fullName,jdbcType=VARCHAR}
+		, #{sellerId,jdbcType=BIGINT}
+		, #{businessType,jdbcType=VARCHAR}
+		, #{sonSellerId,jdbcType=BIGINT}
+		, #{sellerName,jdbcType=VARCHAR}
+		, #{birthday,jdbcType=VARCHAR}
+		, #{sex,jdbcType=BIGINT}
+		, #{keyPerson,jdbcType=BIGINT}
+		, #{branch,jdbcType=VARCHAR}
+		, #{position,jdbcType=VARCHAR}
+		, #{telephone,jdbcType=VARCHAR}
+		, #{instantMessage,jdbcType=VARCHAR}
+		, #{email,jdbcType=VARCHAR}
+		, #{personalWebsite,jdbcType=VARCHAR}
+		, #{postalCode,jdbcType=VARCHAR}
+		, #{address,jdbcType=VARCHAR}
+		, #{hobby,jdbcType=VARCHAR}
+		, #{remark,jdbcType=VARCHAR}
+		, #{createUser,jdbcType=BIGINT}
+		, #{createName,jdbcType=VARCHAR}
+		, #{createTime,jdbcType=TIMESTAMP}
+		, #{updateUser,jdbcType=BIGINT}
+		, #{updateName,jdbcType=VARCHAR}
+		, #{updateTime,jdbcType=TIMESTAMP}
+		, #{userInfoId,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<update id="updateContactPerson" parameterType="com.yuedi.entity.ContactPerson">
+		UPDATE contact_person
+		SET
+		full_name=#{fullName,jdbcType=VARCHAR}
+		, seller_id=#{sellerId,jdbcType=BIGINT}
+		, businessType=#{businessType,jdbcType=VARCHAR}
+		, son_seller_id=#{sonSellerId,jdbcType=BIGINT}
+		, seller_name=#{sellerName,jdbcType=VARCHAR}
+		, birthday=#{birthday,jdbcType=VARCHAR}
+		, sex=#{sex,jdbcType=BIGINT}
+		, key_person=#{keyPerson,jdbcType=BIGINT}
+		, branch=#{branch,jdbcType=VARCHAR}
+		, position=#{position,jdbcType=VARCHAR}
+		, telephone=#{telephone,jdbcType=VARCHAR}
+		, instant_message=#{instantMessage,jdbcType=VARCHAR}
+		, email=#{email,jdbcType=VARCHAR}
+		, personal_website=#{personalWebsite,jdbcType=VARCHAR}
+		, postal_code=#{postalCode,jdbcType=VARCHAR}
+		, address=#{address,jdbcType=VARCHAR}
+		, hobby=#{hobby,jdbcType=VARCHAR}
+		, remark=#{remark,jdbcType=VARCHAR}
+		, create_user=#{createUser,jdbcType=BIGINT}
+		, create_name=#{createName,jdbcType=VARCHAR}
+		, create_time=#{createTime,jdbcType=TIMESTAMP}
+		, update_user=#{updateUser,jdbcType=BIGINT}
+		, update_name=#{updateName,jdbcType=VARCHAR}
+		, update_time=#{updateTime,jdbcType=TIMESTAMP}
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findContactPersonById" resultMap="contactPersonResultMap"
+		parameterType="Long">
+		SELECT *
+		FROM contact_person
+		WHERE id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteContactPersonById" parameterType="Long">
+		DELETE FROM contact_person
+		WHERE id = #{id,jdbcType=BIGINT}
+	</delete>
+
+</mapper>

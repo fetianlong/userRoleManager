@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.LoginLogDao">    
+  <resultMap id="IpLoginLogResultMap" type="com.yuedi.entity.IpLoginLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+    <result column="seller_name" property="sellerName" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="VARCHAR" />
+    <result column="logout_time" property="logoutTime" jdbcType="VARCHAR" />
+    <result column="login_ip" property="loginIp" jdbcType="VARCHAR" />
+    <result column="login_area" property="loginArea" jdbcType="VARCHAR" />
+    <result column="login_source" property="loginSource" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_name, seller_id, seller_name, login_time, logout_time, login_ip, login_area, 
+    login_source,ctime
+  </sql>
+  <select id="selectLoginLogByUsername" resultMap="IpLoginLogResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ip_login_log
+    where user_name = #{userName,jdbcType=VARCHAR}
+    ORDER BY id desc
+  </select>
+  
+    <select id="selectLoginLogLimit" resultMap="IpLoginLogResultMap" parameterType="MyPage" >
+    select 
+    <include refid="Base_Column_List" />
+    from ip_login_log where 1=1
+    <if test="params.userName != null and params.userName !='' ">
+	  	AND user_name = "${params.userName}"
+  	</if>
+  	  <if test="params.sellerName != null and params.sellerName !='' ">
+	  	AND seller_name like CONCAT('%','${params.sellerName}','%' )  
+  	</if>
+  	<if test="params.fmSTime != null and params.fmSTime != '' and params.fmETime != null and params.fmETime != '' ">
+    	and ctime between '${params.fmSTime}' and '${params.fmETime}'
+    </if>
+    ORDER BY id desc
+  </select>
+  
+  <insert id="insertLoginLog" parameterType="com.yuedi.entity.IpLoginLog" >
+    insert into ip_login_log (id, user_name, seller_id, 
+      seller_name, login_time, logout_time, 
+      login_ip, login_area, login_source,ctime
+      )
+    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{sellerId,jdbcType=BIGINT}, 
+      #{sellerName,jdbcType=VARCHAR}, #{loginTime,jdbcType=VARCHAR}, #{logoutTime,jdbcType=VARCHAR}, 
+      #{loginIp,jdbcType=VARCHAR}, #{loginArea,jdbcType=VARCHAR}, #{loginSource,jdbcType=VARCHAR}, #{ctime,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertLoginLogother" parameterType="com.yuedi.entity.IpLoginLog" >
+    insert into ip_login_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="sellerName != null" >
+        seller_name,
+      </if>
+      <if test="loginTime != null" >
+        login_time,
+      </if>
+      <if test="logoutTime != null" >
+        logout_time,
+      </if>
+      <if test="loginIp != null" >
+        login_ip,
+      </if>
+      <if test="loginArea != null" >
+        login_area,
+      </if>
+      <if test="loginSource != null" >
+        login_source,
+      </if>
+       <if test="ctime != null" >
+        ctime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=BIGINT},
+      </if>
+      <if test="sellerName != null" >
+        #{sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        #{loginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="logoutTime != null" >
+        #{logoutTime,jdbcType=VARCHAR},
+      </if>
+      <if test="loginIp != null" >
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginArea != null" >
+        #{loginArea,jdbcType=VARCHAR},
+      </if>
+      <if test="loginSource != null" >
+        #{loginSource,jdbcType=VARCHAR},
+      </if>
+       <if test="ctime != null" >
+        #{ctime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateLoginLogother" parameterType="com.yuedi.entity.IpLoginLog" >
+    update ip_login_log
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=BIGINT},
+      </if>
+      <if test="sellerName != null" >
+        seller_name = #{sellerName,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        login_time = #{loginTime,jdbcType=VARCHAR},
+      </if>
+      <if test="logoutTime != null" >
+        logout_time = #{logoutTime,jdbcType=VARCHAR},
+      </if>
+      <if test="loginIp != null" >
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginArea != null" >
+        login_area = #{loginArea,jdbcType=VARCHAR},
+      </if>
+      <if test="loginSource != null" >
+        login_source = #{loginSource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateLoginLog" parameterType="com.yuedi.entity.IpLoginLog" >
+    update ip_login_log
+    set user_name = #{userName,jdbcType=VARCHAR},
+      seller_id = #{sellerId,jdbcType=BIGINT},
+      seller_name = #{sellerName,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=VARCHAR},
+      logout_time = #{logoutTime,jdbcType=VARCHAR},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      login_area = #{loginArea,jdbcType=VARCHAR},
+      login_source = #{loginSource,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

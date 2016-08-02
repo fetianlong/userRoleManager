@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.PaperDao" >
+  <resultMap id="PaperResultMap" type="com.yuedi.entity.Paper" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="Title" property="title" jdbcType="VARCHAR" />
+    <result column="first" property="first" jdbcType="VARCHAR" />
+    <result column="Second" property="second" jdbcType="VARCHAR" />
+    <result column="Third" property="third" jdbcType="VARCHAR" />
+    <result column="Type" property="type" jdbcType="INTEGER" />
+    <result column="Ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="name" property="orderTypeName" jdbcType="VARCHAR" />
+    <result column="order_type_id" property="orderTypeId" jdbcType="INTEGER" />
+  </resultMap>
+   <select id="selectPaperByPrimaryKey" resultMap="PaperResultMap"
+		parameterType="java.lang.Integer">
+		select *
+		from yuedi_Paper
+		where id = #{id}
+	</select>
+	<delete id="deletePaperByPrimaryKey" parameterType="java.lang.Integer">
+		delete from yuedi_Paper
+		where id = #{id}
+	</delete>
+	<insert id="insertPaper" parameterType="com.yuedi.entity.Paper"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into yuedi_Paper (title, first,second,third,type,ctime,order_type_id)
+		values (#{title}, #{first},#{second},#{third},#{type},#{ctime},#{orderTypeId})
+	</insert>
+	<update id="updatePaperByPrimaryKey" parameterType="com.yuedi.entity.Paper">
+		update yuedi_Paper
+		set title = #{title},
+		first = #{first},
+		second = #{second},
+		third = #{third},
+		type = #{type},
+		ctime = #{ctime},
+		order_type_id=#{orderTypeId}
+		where id = #{id}
+	</update>
+
+	<select id="selectPaperLimit" resultMap="PaperResultMap">
+		select * from yuedi_Paper
+		WHERE 1=1
+		<if test="params.title!=null">
+		and title like #{params.title}
+		</if>
+		<if test="params.type!=null">
+		and type =#{params.type}
+		</if>
+		order by ctime desc
+	</select>
+</mapper>

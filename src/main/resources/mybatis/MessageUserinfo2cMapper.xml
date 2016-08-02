@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.MessageUserinfo2cDao">
+    <resultMap type="messageUserinfo2c" id="messageUserinfo2cResult">
+        <result column="id" property="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="messageId" property="messageId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+        <result column="userinfo2cName" property="userinfo2cName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="hobby" property="hobby" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result property="messageDateTime" column="messageDateTime" jdbcType="DATE" javaType="java.util.Date"/>
+        <result column="messageName" property="messageName" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <result column="state" property="state" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </resultMap>
+	<insert id="insertMessageUserinfo2c" parameterType="messageUserinfo2c" useGeneratedKeys="true" keyProperty="id">
+		    INSERT INTO message_userinfo2c
+		         (
+		              messageId
+		            , userinfo2cName
+		            , hobby
+		            , messageDateTime
+		            , messageName
+		            , state
+		         )
+		    VALUES (
+		           #{messageId}
+		         , #{userinfo2cName}
+		         , #{hobby}
+		         , #{messageDateTime}
+		         , #{messageName}
+		         , #{state}
+		        )
+    </insert>
+    <select id="findAllUndistributedUserinfo2c" parameterType="java.lang.Long" resultMap="messageUserinfo2cResult">
+        SELECT 
+		t1.CreaterName as 'userinfo2cName'
+		FROM store as t1
+		WHERE t1.IsDeleteFlag = 0 
+		  AND t1.SType = 5
+		  AND t1.RelationID = #{sellerId}
+		order by t1.id desc
+    </select>
+	<select id="findUndistributedUserinfo2c" parameterType="messageUserinfo2c" resultMap="messageUserinfo2cResult">
+	<![CDATA[
+        SELECT 
+		t1.CreaterName as 'userinfo2cName'
+		FROM store as t1
+		WHERE t1.IsDeleteFlag = 0 
+		  AND t1.SType = 5
+		  AND t1.RelationID = #{sellerId}
+		  AND t1.CreaterName not in
+		  (
+        SELECT 
+		t2.userinfo2cName
+		FROM message_userinfo2c as t2
+		WHERE t2.hobby = '1'
+		  AND t2.state = '1'
+		  AND (t2.messageDateTime > #{messageDateTime} or t2.messageDateTime is null)
+		  AND t2.messageId = #{messageId}
+		  )
+		order by t1.id desc
+	]]>
+    </select>
+    <select id="findDistributedUserinfo2c" parameterType="messageUserinfo2c" resultMap="messageUserinfo2cResult">
+   	 <![CDATA[
+        SELECT 
+		t2.userinfo2cName
+		FROM message_userinfo2c as t2
+		WHERE t2.hobby = '1'
+		  AND t2.state = '1'
+		  AND (t2.messageDateTime > #{messageDateTime} or t2.messageDateTime is null)
+		  AND t2.messageId = #{messageId}
+		order by t2.id desc
+	]]>
+    </select>
+    <select id="findUserinfo2cByMessageId" parameterType="java.lang.Long" resultMap="messageUserinfo2cResult">
+   	 <![CDATA[
+        SELECT 
+		ID
+		FROM message_userinfo2c as t1
+		WHERE t1.messageId = #{messageId}
+	]]>
+    </select>
+    <select id="findUserinfo2cByMessageIdAndUserinfo2cName" parameterType="messageUserinfo2c" resultMap="messageUserinfo2cResult">
+   	 <![CDATA[
+        SELECT 
+		ID
+		FROM message_userinfo2c as t1
+		WHERE t1.messageId = #{messageId}
+		  AND t1.userinfo2cName = #{userinfo2cName}
+	]]>
+    </select>
+    <select id="findUserinfo2cListByMessageId" parameterType="java.lang.Long" resultMap="messageUserinfo2cResult">
+   	 <![CDATA[
+        SELECT
+        t1.messageId,
+		t2.UserName,t2.Tel
+		FROM message_userinfo2c as t1
+		INNER JOIN userinfo2c as t2 on t2.UserName = t1.userinfo2cName
+		WHERE t1.hobby = '1'
+		  AND t1.state = '1'
+		  AND t1.messageId = #{messageId}
+	]]>
+    </select>
+    <update id="updateMessageUserinfo2c" parameterType="messageUserinfo2c">
+	    UPDATE message_userinfo2c
+	     SET 
+	           userinfo2cName=#{userinfo2cName}
+	         , messageDateTime=#{messageDateTime}
+	         , messageName=#{messageName}
+	         , state=#{state}
+		 WHERE ID = #{id}
+    </update>
+    <update id="updateMessageUserinfo2cByMessageIdAndUserinfo2cName" parameterType="messageUserinfo2c">
+	    UPDATE message_userinfo2c t1
+	     SET 
+	         state=#{state}
+		 WHERE t1.messageId = #{messageId}
+		  AND t1.userinfo2cName = #{userinfo2cName}
+    </update>
+    <update id="updateMessageUserinfo2cMessageDateTime" parameterType="messageUserinfo2c">
+	    UPDATE message_userinfo2c
+	     SET 
+	         messageDateTime=#{messageDateTime}
+		 WHERE ID = #{id}
+    </update>
+    <!-- <delete id="deleteUserinfo2cByMessageIdAndUserinfo2cName" parameterType="messageUserinfo2c">
+		DELETE FROM message_userinfo2c
+		 WHERE t1.messageId = #{messageId}
+		  AND t1.userinfo2cName = #{userinfo2cName}
+	</delete> -->
+</mapper>

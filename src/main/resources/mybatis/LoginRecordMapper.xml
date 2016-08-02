@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.LoginRecordDao" >
+  <resultMap id="LoginRecordResultMap" type="com.yuedi.entity.LoginRecord" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="BIGINT" />
+    <result column="terminal" property="terminal" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="loginDay" property="loginday" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, userId, terminal, version, ctime, updateTime, loginDay
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="LoginRecordResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from login_record
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from login_record
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectLoginRecordLimit" parameterType="MyPage" resultMap="LoginRecordResultMap">
+  	select  t1.Id, t1.userId, t1.terminal, t1.version, t1.ctime, t1.updateTime, t1.loginDay,t2.id,t2.UserName,t2.NickName
+    from login_record t1, userinfo2c t2
+    where t1.userId=t2.id
+    <if test="params.userId !=null and params.userId != '' ">
+    	and t1.userId=${params.userId}
+    </if>
+    <if test="params.loginTime !=null and params.loginTime != '' ">
+    	and t1.loginDay='${params.loginTime}'
+    </if>
+    order by t1.updateTime desc
+  </select>
+</mapper>

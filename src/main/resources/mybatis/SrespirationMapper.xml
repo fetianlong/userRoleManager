@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.fm.SrespirationDao" >
+  <resultMap id="BaseResultMap" type="com.yuedi.entity.fm.Srespiration" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="Group" property="group" jdbcType="INTEGER" />
+    <result column="BreathingType" property="breathingtype" jdbcType="INTEGER" />
+    <result column="Duration" property="duration" jdbcType="INTEGER" />
+    <result column="UserId" property="userid" jdbcType="BIGINT" />
+    <result column="StartTime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="EndTime" property="endtime" jdbcType="TIMESTAMP" />
+    <result column="Day" property="day" jdbcType="INTEGER" />
+    <result column="Ctime" property="ctime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, Group, BreathingType, Duration, UserId, StartTime, EndTime, Day, Ctime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yuedi_fm_srespiration
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yuedi_fm_srespiration
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yuedi.entity.fm.Srespiration" >
+    insert into yuedi_fm_srespiration (Id, Group, BreathingType, 
+      Duration, UserId, StartTime, 
+      EndTime, Day, Ctime
+      )
+    values (#{id,jdbcType=INTEGER}, #{group,jdbcType=INTEGER}, #{breathingtype,jdbcType=INTEGER}, 
+      #{duration,jdbcType=INTEGER}, #{userid,jdbcType=BIGINT}, #{starttime,jdbcType=TIMESTAMP}, 
+      #{endtime,jdbcType=TIMESTAMP}, #{day,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuedi.entity.fm.Srespiration" >
+    insert into yuedi_fm_srespiration
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="group != null" >
+        Group,
+      </if>
+      <if test="breathingtype != null" >
+        BreathingType,
+      </if>
+      <if test="duration != null" >
+        Duration,
+      </if>
+      <if test="userid != null" >
+        UserId,
+      </if>
+      <if test="starttime != null" >
+        StartTime,
+      </if>
+      <if test="endtime != null" >
+        EndTime,
+      </if>
+      <if test="day != null" >
+        Day,
+      </if>
+      <if test="ctime != null" >
+        Ctime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="group != null" >
+        #{group,jdbcType=INTEGER},
+      </if>
+      <if test="breathingtype != null" >
+        #{breathingtype,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null" >
+        #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="day != null" >
+        #{day,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuedi.entity.fm.Srespiration" >
+    update yuedi_fm_srespiration
+    <set >
+      <if test="group != null" >
+        Group = #{group,jdbcType=INTEGER},
+      </if>
+      <if test="breathingtype != null" >
+        BreathingType = #{breathingtype,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null" >
+        Duration = #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        UserId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="starttime != null" >
+        StartTime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        EndTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="day != null" >
+        Day = #{day,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        Ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuedi.entity.fm.Srespiration" >
+    update yuedi_fm_srespiration
+    set Group = #{group,jdbcType=INTEGER},
+      BreathingType = #{breathingtype,jdbcType=INTEGER},
+      Duration = #{duration,jdbcType=INTEGER},
+      UserId = #{userid,jdbcType=BIGINT},
+      StartTime = #{starttime,jdbcType=TIMESTAMP},
+      EndTime = #{endtime,jdbcType=TIMESTAMP},
+      Day = #{day,jdbcType=INTEGER},
+      Ctime = #{ctime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectCountSrespiration" parameterType="MyPage" resultMap="BaseResultMap">
+  	select SUM(t.Duration) as shichang,t.`Group`,t.BreathingType,sum(t.`Group` * CASE t.BreathingType WHEN 1 THEN 6 WHEN 2 THEN 8 WHEN 3 THEN 10 WHEN 4 THEN 12 END) as types, 
+	t.UserId, t.Ctime,t.`Day`,u.NickName as userName, s.Score from yuedi_fm_srespiration t, userinfo2c u,yuedi_fm_score s WHERE t.UserId=u.ID AND t.UserId=s.UserId AND s.ScoreType=1 
+	AND DATE_FORMAT(t.Ctime,'%Y-%m-%d')=DATE_FORMAT(s.Ctime,'%Y-%m-%d') AND t.`Day`=s.`Day`
+	<if test="params.userName != null and params.userName != '' ">
+		and u.UserName='${params.userName}'
+	</if>
+	<if test="params.nowTime != null and params.nowTime != '' ">
+		AND DATE_FORMAT(t.Ctime,'%Y-%m-%d')='${params.nowTime}'
+	</if>
+	group by DATE_FORMAT(t.Ctime,'%Y-%m-%d'),t.UserId 
+	order by s.Score desc
+  </select>
+</mapper>

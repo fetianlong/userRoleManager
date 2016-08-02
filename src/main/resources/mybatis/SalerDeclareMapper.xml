@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuedi.dao.SalerDeclareDao">    
+	<resultMap type="salerDeclare" id="salerDeclareResult">
+		<result property="id" column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="sellerId" column="sellerId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+	    <result property="declareName" column="declareName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="declareTel" column="declareTel" jdbcType="BIGINT" javaType="java.lang.Long"/>
+	    <result property="declareNumber" column="declareNumber" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+	    <result property="state" column="state" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="spec" column="spec" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	</resultMap>
+    <insert id="insertSalerDeclare" parameterType="salerDeclare" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO saler_declare 
+				(SellerID,
+				declareName, 
+				declareTel, 
+				declareNumber,
+				state,
+				spec
+				)
+		VALUES
+				(#{sellerId},
+				#{declareName}, 
+				#{declareTel}, 
+				#{declareNumber}, 
+				#{state},
+				#{spec})
+	</insert>
+	 <delete id="deletesalerDeclarebyId" parameterType="Long">
+	    DELETE FROM saler_declare 
+		WHERE ID = #{id} ;
+	</delete>
+		<update id="updatesalerDeclareById"   parameterType="Long">
+	    UPDATE saler_declare SET state = '2'
+	     WHERE id = #{id}
+	</update>
+	<select id="selectSalerDeclareLimit" resultMap="salerDeclareResult">
+		Select 
+		t1.id,
+		t2.Name,t1.declareName,t1.declareTel,t1.declareNumber,t1.sellerId,t1.state,t1.spec
+		from saler_declare as t1 INNER JOIN seller  as t2
+		on t1.SellerID=t2.ID
+		WHERE 1=1
+		<if test="params.sellerId != null">
+			AND t1.SellerID = #{params.sellerId}
+		</if>
+	     <if test="params.name != null">
+			AND t1.declareName like #{params.name}
+		</if>
+	    <if test="params.sellerName != null">
+			AND t2.`Name` like  #{params.sellerName}
+		</if>
+		 <if test="params.state != null">
+			AND t1.state =  #{params.state}
+		</if>
+	</select>
+	<select id="selectCenterSalerLimit" resultMap="salerDeclareResult">
+		Select 
+		t1.id,
+		t2.Name,t1.declareName,t1.declareTel,t1.declareNumber,t1.sellerId,t1.state,t1.spec
+		from saler_declare as t1 INNER JOIN seller  as t2
+		on t1.SellerID=t2.ID
+		WHERE 1=1
+	     <if test="params.name != null">
+			AND t1.declareName like #{params.name}
+		</if>
+	    <if test="sellerName != null">
+			AND t2.`Name` like  #{params.sellerName}
+		</if>
+		 <if test="state != null">
+			AND t1.state =  #{params.state}
+		</if>
+	</select>
+	<select id="selectSalerDeclareById" resultMap="salerDeclareResult">
+		Select 
+		t1.id,
+		t1.declareName,t1.declareTel,t1.declareNumber,t1.sellerId,t1.state,t1.spec
+		from saler_declare t1
+		WHERE t1.id = #{salerDeclareId}
+	</select>
+</mapper>

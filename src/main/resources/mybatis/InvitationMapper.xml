@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.fm.InvitationDao" >
+  <resultMap id="BaseResultMap" type="com.yuedi.entity.fm.Invitation" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="InvitationCode" property="invitationcode" jdbcType="VARCHAR" />
+    <result column="ProposerId" property="proposerid" jdbcType="BIGINT" />
+    <result column="InstitutionId" property="institutionid" jdbcType="BIGINT" />
+    <result column="UserId" property="userid" jdbcType="BIGINT" />
+    <result column="Tel" property="tel" jdbcType="VARCHAR" />
+    <result column="IsEffe" property="iseffe" jdbcType="INTEGER" />
+    <result column="Ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="Btime" property="btime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, InvitationCode, ProposerId, InstitutionId, UserId, Tel, IsEffe, Ctime, Btime, 
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from yuedi_fm_invitation
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from yuedi_fm_invitation
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yuedi.entity.fm.Invitation" useGeneratedKeys="true" keyProperty="id">
+    insert into yuedi_fm_invitation (Id, InvitationCode, ProposerId, 
+      InstitutionId, UserId, Tel, 
+      IsEffe, Ctime, Btime, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{invitationcode,jdbcType=VARCHAR}, #{proposerid,jdbcType=BIGINT}, 
+      #{institutionid,jdbcType=BIGINT}, #{userid,jdbcType=BIGINT}, #{tel,jdbcType=VARCHAR}, 
+      #{iseffe,jdbcType=INTEGER}, #{ctime,jdbcType=TIMESTAMP}, #{btime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuedi.entity.fm.Invitation"  useGeneratedKeys="true" keyProperty="id">
+    insert into yuedi_fm_invitation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="invitationcode != null" >
+        InvitationCode,
+      </if>
+      <if test="proposerid != null" >
+        ProposerId,
+      </if>
+      <if test="institutionid != null" >
+        InstitutionId,
+      </if>
+      <if test="userid != null" >
+        UserId,
+      </if>
+      <if test="tel != null" >
+        Tel,
+      </if>
+      <if test="iseffe != null" >
+        IsEffe,
+      </if>
+      <if test="ctime != null" >
+        Ctime,
+      </if>
+      <if test="btime != null" >
+        Btime,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="invitationcode != null" >
+        #{invitationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="proposerid != null" >
+        #{proposerid,jdbcType=BIGINT},
+      </if>
+      <if test="institutionid != null" >
+        #{institutionid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="iseffe != null" >
+        #{iseffe,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="btime != null" >
+        #{btime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuedi.entity.fm.Invitation" >
+    update yuedi_fm_invitation
+    <set >
+      <if test="invitationcode != null" >
+        InvitationCode = #{invitationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="proposerid != null" >
+        ProposerId = #{proposerid,jdbcType=BIGINT},
+      </if>
+      <if test="institutionid != null" >
+        InstitutionId = #{institutionid,jdbcType=BIGINT},
+      </if>
+      <if test="userid != null" >
+        UserId = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="tel != null" >
+        Tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="iseffe != null" >
+        IsEffe = #{iseffe,jdbcType=INTEGER},
+      </if>
+      <if test="ctime != null" >
+        Ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="btime != null" >
+        Btime = #{btime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuedi.entity.fm.Invitation" >
+    update yuedi_fm_invitation
+    set InvitationCode = #{invitationcode,jdbcType=VARCHAR},
+      ProposerId = #{proposerid,jdbcType=BIGINT},
+      InstitutionId = #{institutionid,jdbcType=BIGINT},
+      UserId = #{userid,jdbcType=BIGINT},
+      Tel = #{tel,jdbcType=VARCHAR},
+      IsEffe = #{iseffe,jdbcType=INTEGER},
+      Ctime = #{ctime,jdbcType=TIMESTAMP},
+      Btime = #{btime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectInvitationLimit" parameterType="MyPage" resultMap="BaseResultMap">
+  	select t1.Id, t1.InvitationCode, t1.ProposerId, t1.InstitutionId, t1.UserId, t1.Tel, t1.IsEffe, t1.Ctime, t1.Btime, t1.remark,t2.name as institutionName, t4.username as proposerName
+  	from yuedi_fm_invitation t1, seller t2, userinfo t4 where t2.id = t1.InstitutionId AND t1.ProposerId=t4.ID 
+  	<if test="params.pid != null and params.pid != '' ">
+   		and t1.InstitutionId = #{params.pid}
+   	</if>
+   	<if test="params.uid != null and params.uid != '' ">
+		and t4.id = t1.ProposerId and t1.ProposerId = #{params.uid}
+   	</if>
+   	<if test="params.code != null and params.code != '' ">
+   		and t1.InvitationCode = #{params.code}
+   	</if>
+   group by t1.id order by t1.Ctime desc
+  </select>
+  <select id="selectInvitationCountLimit" parameterType="MyPage" resultMap="BaseResultMap">
+  	SELECT count(i.id) as countId, i.InvitationCode,i.ProposerId,i.InstitutionId,i.UserId,i.Ctime,u.UserName,s.`Name`,(si.default_count + si.add_count) as allCount,si.residue_count 
+  	from yuedi_fm_invitation i,userinfo u,seller s,seller_invitation_count si 
+  	WHERE i.ProposerId=u.ID AND i.InstitutionId=s.ID AND i.InstitutionId=si.seller_id
+  	<if test="params.pid != null and params.pid !='' ">
+	  	AND i.InstitutionId = ${params.pid} 
+  	</if>
+  	<if test="params.fmSTime != null and params.fmSTime != '' and params.fmETime != null and params.fmETime != '' ">
+    	and DATE_FORMAT(i.Ctime,'%Y-%m-%d') between '${params.fmSTime}' and '${params.fmETime}'
+    </if>
+  	<if test="params.groupByW != null and params.groupByW != '' ">
+	  	GROUP BY 
+  		${params.groupByW}
+  	</if>
+  	
+  	ORDER BY countId DESC
+  	
+  </select>
+</mapper>

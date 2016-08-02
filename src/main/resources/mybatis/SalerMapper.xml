@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuedi.dao.SalerDao">    
+	<resultMap type="saler" id="salerResult">
+		<result property="id" column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="createrId" column="createrId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="sellerId" column="sellerId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+		<result property="useId" column="useId" jdbcType="BIGINT" javaType="java.lang.Long"/>
+	    <result property="salerCode" column="salerCode" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="tdCodeURL" column="tdCodeURL" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="ordIndex" column="ordIndex" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="name" column="name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="tel" column="tel" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="createrName" column="createrName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="cardCode" column="cardCode" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="email" column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="qq" column="qq" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="weiChat" column="weiChat" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="contacts" column="contacts" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	    <result property="contactsPhone" column="contactsPhone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result property="spec" column="spec" jdbcType="VARCHAR" javaType="java.lang.String"/>
+		<result property="sex" column="sex" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+		<result property="createDateTime" column="createDateTime" jdbcType="DATE" javaType="java.util.Date"/>
+		<result property="twocodeurl" column="twocodeurl" jdbcType="VARCHAR" javaType="java.lang.String"/>
+	</resultMap>
+    <insert id="insertSaler" parameterType="saler" useGeneratedKeys="true" keyProperty="id">
+    	INSERT INTO SALER 
+				(createrId, 
+				sellerId,
+				useId, 
+				salerCode, 
+				tdCodeURL,
+				ordIndex, 
+				name,
+				cardCode,
+				tel, 
+				email, 
+				qq,
+				contacts,
+				contactsPhone,
+				spec,
+				weiChat,
+				sex,
+				CreateDateTime,TwoCodeUrl)
+		VALUES
+				(#{createrId}, 
+				#{sellerId},
+				#{useId}, 
+				#{salerCode}, 
+				#{tdCodeURL}, 
+				#{ordIndex}, 
+				#{name}, 
+				#{cardCode},
+				#{tel}, 
+				#{email}, 
+				#{qq},
+				#{contacts},
+				#{contactsPhone},
+				#{spec},
+				#{weiChat},
+				#{sex},
+				#{createDateTime},
+				#{twocodeurl})
+	</insert>
+	 <delete id="deleteSalerbyId" parameterType="Long">
+	    DELETE FROM SALER 
+		WHERE ID = #{id} ;
+	</delete>
+	<update id="updateSalerById"   parameterType="saler">
+	    UPDATE SALER SET tel=#{tel},sex=#{sex},email=#{email},
+	     contacts=#{contacts},contactsPhone=#{contactsPhone},Spec=#{spec}
+	     WHERE id = #{id}
+	</update>
+	<update id="updatetwocodeUrl" parameterType="saler">
+	    UPDATE SALER SET TwoCodeUrl = #{twocodeurl}
+	     WHERE id = #{id}
+	</update>
+	<select id="selectsaler"  resultMap="salerResult">
+		Select 
+		t1.id,
+		t1.CardCode,t1.Contacts,t1.ContactsPhone,t1.CreateDateTime,t1.CreaterId,t1.twocodeurl,
+		t1.CreaterName,t1.Email,t1.OrdIndex,t1.`Name`,t1.QQ,t1.SalerCode,t1.SellerID,
+		t1.Sex,t1.Spec,t1.TDCodeURL,t1.Tel,t1.UseID,t1.WeiChat,
+		t2.ID as 'sjid',
+		t2.Area,t2.Authentication,t2.BusinessScope,t2.Category,t2.CharterCode,t2.CharterEffectiveDate,
+		t2.CharterExpiredDate,t2.City,t2.`Name` as 'sjname',t2.ObligationOrg,t2.OfficeAddr,
+		t2.OrgCode,t2.Province,t2.Tel as 'sjtel',t2.Remark,t2.RegAddr
+		from Saler as t1 INNER JOIN seller  as t2
+		on t1.SellerID=t2.ID
+	</select>
+	<select id="selectSalerByUserId" parameterType="java.lang.Long" resultMap="salerResult">
+	    Select t1.id, t1.CardCode,t1.Contacts,t1.ContactsPhone,t1.CreateDateTime,t1.CreaterId,t1.twocodeurl, t1.CreaterName,t1.Email,t1.OrdIndex,t1.`Name`,t1.QQ,t1.SalerCode,t1.SellerID, t1.Sex,t1.Spec,t1.TDCodeURL,t1.Tel,t1.UseID,t1.WeiChat
+		from Saler as t1 
+		inner JOIN saler_userinfo t2 on t1.ID = t2.sallerId and t2.isUsed = '1'
+		where t2.userId= #{id}
+	</select>
+	<select id="selectSalerById" parameterType="java.lang.Long" resultMap="salerResult">
+	    Select t1.id, t1.CardCode,t1.Contacts,t1.ContactsPhone,t1.CreateDateTime,t1.CreaterId,t1.twocodeurl, t1.CreaterName,t1.Email,t1.OrdIndex,t1.`Name`,t1.QQ,t1.SalerCode,t1.SellerID, t1.Sex,t1.Spec,t1.TDCodeURL,t1.Tel,t1.UseID,t1.WeiChat
+		from Saler as t1 
+		where t1.id= #{id}
+	</select>
+	<select id="selectSalerBysellerId" parameterType="saler"  resultMap="salerResult">
+	    <![CDATA[
+		Select 
+		t1.id,
+		t1.CardCode,t1.Contacts,t1.ContactsPhone,t1.CreateDateTime,t1.CreaterId,t1.twocodeurl,
+		t1.CreaterName,t1.Email,t1.OrdIndex,t1.`Name`,t1.QQ,t1.SalerCode,t1.SellerID,
+		t1.Sex,t1.Spec,t1.TDCodeURL,t1.Tel,t1.UseID,t1.WeiChat,
+		t2.ID as 'sjid',
+		t2.Area,t2.Authentication,t2.BusinessScope,t2.Category,t2.CharterCode,t2.CharterEffectiveDate,
+		t2.CharterExpiredDate,t2.City,t2.`Name` as 'sjname',t2.ObligationOrg,t2.OfficeAddr,
+		t2.OrgCode,t2.Province,t2.Tel as 'sjtel',t2.Remark,t2.RegAddr
+		from Saler as t1 INNER JOIN seller  as t2
+		on t1.SellerID=t2.ID
+			where t1.sellerid=#{sid} 
+	    ]]>
+	</select>
+	<select id="selectSalerLimit" resultMap="salerResult">
+		Select 
+		t1.id,
+		t1.CardCode,t1.Contacts,t1.ContactsPhone,t1.CreateDateTime,t1.CreaterId,t1.twocodeurl,
+		t1.CreaterName,t1.Email,t1.OrdIndex,t1.`Name`,t1.QQ,t1.SalerCode,t1.SellerID,
+		t1.Sex,t1.Spec,t1.TDCodeURL,t1.Tel,t1.UseID,t1.WeiChat,
+		t2.ID as 'sjid',
+		t2.Area,t2.Authentication,t2.BusinessScope,t2.Category,t2.CharterCode,t2.CharterEffectiveDate,
+		t2.CharterExpiredDate,t2.City,t2.`Name` as 'sjname',t2.ObligationOrg,t2.OfficeAddr,
+		t2.OrgCode,t2.Province,t2.Tel as 'sjtel',t2.Remark,t2.RegAddr
+		<!-- s.UserName as 'useName '-->
+		from Saler as t1 
+		INNER JOIN seller as t2 on t1.SellerID=t2.ID
+		<!-- LEFT JOIN (select t3.sallerId,u.UserName from saler_userinfo t3 INNER JOIN userinfo u on t3.userId = u.ID  where t3.isUsed = '1') s on t1.ID=s.sallerId -->
+		WHERE 1=1
+		<if test="params.sellerId != null">
+			AND t1.SellerID = #{params.sellerId}
+		</if>
+	     <if test="params.name != null">
+			AND t1.name like #{params.name}
+		</if>
+	    <if test="params.sellerName != null">
+			AND t2.`Name` like  #{params.sellerName}
+		</if>
+	    <if test="params.tel != null">
+			AND t1.Tel =  #{params.tel}
+		</if>
+		 <if test="params.salerCode != null">
+			AND t1.CardCode =  #{params.salerCode}
+		</if>
+	</select>
+	<select id="selectMaxSalerCardCode"  resultMap="salerResult">
+		select s.CardCode from saler s where s.ID = (select max(id) ID from saler)
+	</select>
+</mapper>

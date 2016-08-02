@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuedi.dao.workFlow.ProcessInstanceDao" >
+  <resultMap id="ProcessInstanceResultMap" type="com.yuedi.entity.workFlow.ProcessInstance" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="process_name" property="processName" jdbcType="VARCHAR" />
+    <result column="process_id" property="processId" jdbcType="BIGINT" />
+    <result column="node_id" property="nodeId" jdbcType="BIGINT" />
+    <result column="node_order" property="nodeOrder" jdbcType="BIGINT" />
+    <result column="node_name" property="nodeName" jdbcType="VARCHAR" />
+    <result column="form_id" property="formId" jdbcType="BIGINT" />
+    <result column="approver" property="approver" jdbcType="BIGINT" />
+    <result column="approver_name" property="approverName" jdbcType="VARCHAR" />
+    <result column="approval_opinion" property="approvalOpinion" jdbcType="VARCHAR" />
+    <result column="approval_time" property="approvalTime" jdbcType="VARCHAR" />
+    <result column="is_get_back" property="isGetBack" jdbcType="BIT" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="ProcessInstance_Column_List" >
+    id, process_name, process_id, node_id, node_name, form_id, approver, approver_name, node_order,
+    approval_opinion, approval_time, is_get_back, status
+  </sql>
+  <select id="selectProcessInstance" resultMap="ProcessInstanceResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="ProcessInstance_Column_List" />
+    from process_instance
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteProcessInstance" parameterType="java.lang.Long" >
+    delete from process_instance
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yuedi.entity.workFlow.ProcessInstance" useGeneratedKeys="true" keyProperty="id">
+    insert into process_instance (id, process_name, process_id, 
+      node_id, node_name, node_order, form_id, 
+      approver, approver_name, approval_opinion, 
+      approval_time, is_get_back, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{processName,jdbcType=VARCHAR}, #{processId,jdbcType=BIGINT}, 
+      #{nodeId,jdbcType=BIGINT}, #{nodeName,jdbcType=VARCHAR}, #{nodeOrder,jdbcType=BIGINT},#{formId,jdbcType=BIGINT}, 
+      #{approver,jdbcType=BIGINT}, #{approverName,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, 
+      #{approvalTime,jdbcType=VARCHAR}, #{isGetBack,jdbcType=BIT}, #{status,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuedi.entity.workFlow.ProcessInstance" useGeneratedKeys="true" keyProperty="id">
+    insert into process_instance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="processName != null" >
+        process_name,
+      </if>
+      <if test="nodeOrder != null" >
+        node_order,
+      </if>
+      <if test="processId != null" >
+        process_id,
+      </if>
+      <if test="nodeId != null" >
+        node_id,
+      </if>
+      <if test="nodeName != null" >
+        node_name,
+      </if>
+      <if test="formId != null" >
+        form_id,
+      </if>
+      <if test="approver != null" >
+        approver,
+      </if>
+      <if test="approverName != null" >
+        approver_name,
+      </if>
+      <if test="approvalOpinion != null" >
+        approval_opinion,
+      </if>
+      <if test="approvalTime != null" >
+        approval_time,
+      </if>
+      <if test="isGetBack != null" >
+        is_get_back,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="processName != null" >
+        #{processName,jdbcType=VARCHAR},
+      </if>
+      <if test="processId != null" >
+        #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="nodeId != null" >
+        #{nodeId,jdbcType=BIGINT},
+      </if>
+      <if test="nodeName != null" >
+        #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeOrder != null" >
+        #{nodeOrder,jdbcType=BIGINT},
+      </if>
+      <if test="formId != null" >
+        #{formId,jdbcType=BIGINT},
+      </if>
+      <if test="approver != null" >
+        #{approver,jdbcType=BIGINT},
+      </if>
+      <if test="approverName != null" >
+        #{approverName,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null" >
+        #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalTime != null" >
+        #{approvalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isGetBack != null" >
+        #{isGetBack,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateProcessInstanceSelective" parameterType="com.yuedi.entity.workFlow.ProcessInstance" >
+    update process_instance
+    <set >
+      <if test="processName != null" >
+        process_name = #{processName,jdbcType=VARCHAR},
+      </if>
+      <if test="processId != null" >
+        process_id = #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="nodeId != null" >
+        node_id = #{nodeId,jdbcType=BIGINT},
+      </if>
+      <if test="nodeName != null" >
+        node_name = #{nodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeOrder != null" >
+        node_order = #{nodeOrder,jdbcType=BIGINT},
+      </if>
+      <if test="formId != null" >
+        form_id = #{formId,jdbcType=BIGINT},
+      </if>
+      <if test="approver != null" >
+        approver = #{approver,jdbcType=BIGINT},
+      </if>
+      <if test="approverName != null" >
+        approver_name = #{approverName,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null" >
+        approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalTime != null" >
+        approval_time = #{approvalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="isGetBack != null" >
+        is_get_back = #{isGetBack,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateProcessInstance" parameterType="com.yuedi.entity.workFlow.ProcessInstance" >
+    update process_instance
+    set process_name = #{processName,jdbcType=VARCHAR},
+      process_id = #{processId,jdbcType=BIGINT},
+      node_id = #{nodeId,jdbcType=BIGINT},
+      node_name = #{nodeName,jdbcType=VARCHAR},
+      node_order = #{nodeOrder,jdbcType=BIGINT},
+      form_id = #{formId,jdbcType=BIGINT},
+      approver = #{approver,jdbcType=BIGINT},
+      approver_name = #{approverName,jdbcType=VARCHAR},
+      approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      approval_time = #{approvalTime,jdbcType=VARCHAR},
+      is_get_back = #{isGetBack,jdbcType=BIT},
+      status = #{status,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getProcessInstance" resultMap="ProcessInstanceResultMap" parameterType="com.yuedi.entity.workFlow.ProcessInstance">
+  	select 
+    <include refid="ProcessInstance_Column_List" />
+    from process_instance
+    where 1=1
+    <if test="processId != null">
+    	process_id = #{processId}
+    </if>
+    <if test="formId != null">
+    	form_id = #{formId}
+    </if>
+    <if test="nodeId != null">
+    	node_id = #{nodeId}
+    </if>
+  </select>
+  <select id="getProcessInstanceByNodeMax" resultMap="ProcessInstanceResultMap" parameterType="com.yuedi.entity.workFlow.ProcessInstance">
+  	select 
+    id, process_name, process_id, node_id, node_name, form_id, approver, approver_name, max(node_order),
+    approval_opinion, approval_time, is_get_back, status
+    from process_instance
+    where 1=1
+    <if test="processId != null">
+    	process_id = #{processId}
+    </if>
+    <if test="formId != null">
+    	form_id = #{formId}
+    </if>
+    <if test="nodeId != null">
+    	node_id = #{nodeId}
+    </if>
+  </select>
+</mapper>

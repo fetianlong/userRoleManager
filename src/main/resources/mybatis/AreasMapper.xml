@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuedi.dao.AreasDao">
+	<resultMap type="areas" id="areasResult">
+		<result property="id" column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+		<result property="parentId" column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+		<result property="level" column="level" jdbcType="INTEGER" javaType="java.lang.Integer" />
+		<result property="name" column="area_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="zipCode" column="zipcode" jdbcType="VARCHAR" javaType="java.lang.String" />
+		<result property="namePy" column="name_py" jdbcType="VARCHAR" javaType="java.lang.String" />
+	</resultMap>
+	<select id="selectAreasByParentId" parameterType="java.lang.Integer" resultMap="areasResult">
+	<![CDATA[
+		SELECT 	
+			id, parent_id, CONCAT(name_py, area_name) AS area_name, zipcode, name_py
+		FROM 
+			as_areas 
+		WHERE parent_id = #{parentId}
+		ORDER BY parent_id ASC, name_py ASC;
+	]]>
+	</select>
+	<select id="selectAreas" parameterType="java.lang.Integer" resultMap="areasResult">
+		<![CDATA[
+			SELECT area_name FROM as_areas where id=#{id}
+		]]>
+	</select>
+	
+	<select id="findAreasByLevel" parameterType="java.lang.Integer" resultMap="areasResult">
+	
+		SELECT * FROM as_areas where level=#{level}
+	
+	</select>
+	<select id="selectAreasByName" parameterType="string" resultMap="areasResult">
+		SELECT * FROM as_areas where area_name like CONCAT('','${name}','%' )
+		<if test="level != 0">
+			 and level=#{level}
+		</if>
+<!-- 		SELECT * FROM as_areas where level=2 and area_name like CONCAT('','${_parameter}','%' )  -->
+	
+	</select>
+	
+	<select id="findListAreasByName" parameterType="areas" resultMap="areasResult">
+		SELECT * FROM as_areas where area_name like CONCAT('','${name}','%' )
+		<if test="level != 0">
+			 and level=#{level}
+		</if>
+<!-- 		SELECT * FROM as_areas where level=2 and area_name like CONCAT('','${_parameter}','%' )  -->
+	
+	</select>
+	<select id="findNameById" parameterType="Integer" resultMap="areasResult">
+		select area_name from as_areas where id=#{id}
+	</select>
+	
+	
+</mapper>
