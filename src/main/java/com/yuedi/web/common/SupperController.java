@@ -39,17 +39,6 @@ public class SupperController {
 	 */
 	protected Long getCurrentUserId() {
 		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-		
-		for (int i = 0; i < 500; i++) {
-			Thread th = new Thread();
-			th.start();
-			Thread th1 = new Thread(); 
-			th1.start();
-			Thread th2 = new Thread();
-			th2.start();
-			Seller seller = new Seller();
-			seller.setName(user.sellerName);
-		}
 //		nowSize ++;
 //		System.err.println("当前调用用户ID次数：" + nowSize);
 		return user.id;
