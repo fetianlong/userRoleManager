@@ -1,4 +1,4 @@
-package com.yuedi.util.twoDimension;  
+/*package com.yuedi.util.twoDimension;  
   
 import java.awt.BasicStroke;
 import java.awt.Color;  
@@ -33,51 +33,51 @@ public class QRCodeEncoderHandler {
     // LOGO高度  
     private static final int HEIGHT = 30;  
       
-    /** 
+    *//** 
      * 生成二维码(QRCode)图片 
      * @param content 存储内容 
      * @param imgPath 图片路径 
-     */  
+     *//*  
     public void encoderQRCode(HashMap<String, String> content, String imgPath) {  
         this.encoderQRCode(content, imgPath, "png", 7);  
     }  
       
-    /** 
+    *//** 
      * 生成二维码(QRCode)图片 
      * @param content 存储内容 
      * @param output 输出流 
-     */  
+     *//*  
     public void encoderQRCode(HashMap<String, String> content, OutputStream output) {  
         this.encoderQRCode(content, output, "png", 7);  
     }  
       
-    /** 
+    *//** 
      * 生成二维码(QRCode)图片 
      * @param content 存储内容 
      * @param imgPath 图片路径 
      * @param imgType 图片类型 
-     */  
+     *//*  
     public void encoderQRCode(HashMap<String, String> content, String imgPath, String imgType) {  
         this.encoderQRCode(content, imgPath, imgType, 7);  
     }  
       
-    /** 
+    *//** 
      * 生成二维码(QRCode)图片 
      * @param content 存储内容 
      * @param output 输出流 
      * @param imgType 图片类型 
-     */  
+     *//*  
     public void encoderQRCode(HashMap<String, String> content, OutputStream output, String imgType) {  
         this.encoderQRCode(content, output, imgType, 7);  
     }  
   
-    /** 
+    *//** 
      * 生成二维码(QRCode)图片 
      * @param content 存储内容 
      * @param imgPath 图片路径 
      * @param imgType 图片类型 
      * @param size 二维码尺寸 
-     */  
+     *//*  
     public void encoderQRCode(HashMap<String, String> content, String imgPath, String imgType, int size) {  
         try {  
             BufferedImage bufImg = this.qRCodeCommon(content, imgType, size);  
@@ -90,13 +90,13 @@ public class QRCodeEncoderHandler {
         }  
     }  
   
-    /** 
+    *//** 
      * 生成二维码(QRCode)图片 
      * @param content 存储内容 
      * @param output 输出流 
      * @param imgType 图片类型 
      * @param size 二维码尺寸 
-     */  
+     *//*  
     public void encoderQRCode(HashMap<String, String> content, OutputStream output, String imgType, int size) {  
         try {  
             BufferedImage bufImg = this.qRCodeCommon(content, imgType, size);  
@@ -107,13 +107,13 @@ public class QRCodeEncoderHandler {
         }  
     }  
       
-    /** 
+    *//** 
      * 生成二维码(QRCode)图片的公共方法 
      * @param content 存储内容 
      * @param imgType 图片类型 
      * @param size 二维码尺寸 
      * @return 
-     */  
+     *//*  
     private BufferedImage qRCodeCommon(HashMap<String, String> content, String imgType, int size) {  
         BufferedImage bufImg = null;  
         try {  
@@ -165,11 +165,11 @@ public class QRCodeEncoderHandler {
         return bufImg;  
     }  
       
-    /** 
+    *//** 
      * 解析二维码（QRCode） 
      * @param imgPath 图片路径 
      * @return 
-     */  
+     *//*  
     public String decoderQRCode(String imgPath) {  
         // QRCode 二维码图片的文件  
         File imageFile = new File(imgPath);  
@@ -187,11 +187,11 @@ public class QRCodeEncoderHandler {
         return content;  
     }  
       
-    /** 
+    *//** 
      * 解析二维码（QRCode） 
      * @param input 输入流 
      * @return 
-     */  
+     *//*  
     public String decoderQRCode(InputStream input) {  
         BufferedImage bufImg = null;  
         String content = null;  
@@ -206,12 +206,12 @@ public class QRCodeEncoderHandler {
         }  
         return content;  
     }  
-    /** 
+    *//** 
      * 执行二维码生成（QRCode） 
      * @param salesmanId 业务员ID 
      * @param codeUrl 下载链接
      * @return 
-     */  
+     *//*  
     
     public void ZxCode(String salesmanId,String codeUrl, String imgPath) {
         HashMap<String, String> encoderContent = new HashMap<String, String>();
@@ -234,7 +234,7 @@ public class QRCodeEncoderHandler {
     	 String jxcode= tdcode.decoderQRCode(imgPath);
     }
     
-    /** 
+    *//** 
      * 插入LOGO 
      *  
      * @param source 
@@ -244,7 +244,7 @@ public class QRCodeEncoderHandler {
      * @param needCompress 
      *            是否压缩 
      * @throws Exception 
-     */  
+     *//*  
     private static void insertImage(BufferedImage source, String imgPath,  int size,
             boolean needCompress) throws Exception {  
         File file = new File(imgPath);  
@@ -282,4 +282,4 @@ public class QRCodeEncoderHandler {
        graph.dispose();  
    }  
 
-}  
+}  */

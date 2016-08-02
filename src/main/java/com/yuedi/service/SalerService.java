@@ -16,7 +16,7 @@ import com.yuedi.dao.SalerUserinfoDao;
 import com.yuedi.entity.MyPage;
 import com.yuedi.entity.Saler;
 import com.yuedi.entity.SalerUserinfo;
-import com.yuedi.util.twoDimension.QRCodeEncoderHandler;
+//import com.yuedi.util.twoDimension.QRCodeEncoderHandler;
 
 @Service
 @Transactional
@@ -62,11 +62,11 @@ public class SalerService {
 				
 				salerParam.setTwocodeurl("http://www.mumfans.com/yuedi-resource/resources/twocode/" + salerParam.getCardCode() + ".jpg");	//服务器中存放路径
 				
-				QRCodeEncoderHandler twoCode = new QRCodeEncoderHandler();
+//				QRCodeEncoderHandler twoCode = new QRCodeEncoderHandler();
 				
 				String imgPath = "D:/yuedi-resource/resources/twocode/" + salerParam.getCardCode() + ".jpg";
 				
-				twoCode.ZxCode(salerParam.getSellerId().toString(), TwocodeUrl, imgPath);
+//				twoCode.ZxCode(salerParam.getSellerId().toString(), TwocodeUrl, imgPath);
 				salerDao.insertSaler(salerParam);
 			}
 			if(id != null) {

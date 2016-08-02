@@ -1,4 +1,4 @@
-package com.yuedi.util.twoDimension;  
+/*package com.yuedi.util.twoDimension;  
   
 import java.awt.image.BufferedImage;  
   
@@ -27,4 +27,4 @@ public class TwoDimensionCodeImage implements QRCodeImage {
         return bufImg.getWidth();  
     }  
   
-}  
+}  */

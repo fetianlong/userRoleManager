@@ -420,12 +420,17 @@
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
         </dependency>
-
-        <dependency>
+		<dependency>
+		    <groupId>com.xiongyingqi</groupId>
+		    <artifactId>qrcode</artifactId>
+		    <version>0.1.10</version>
+		</dependency>
+				
+        <!-- <dependency>
         	<groupId>QRCode</groupId>
         	<artifactId>QRCode</artifactId>
         	<version>1.0</version>
-        </dependency>
+        </dependency> -->
         <dependency>
 	<groupId>commons-io</groupId>
 	<artifactId>commons-io</artifactId>
