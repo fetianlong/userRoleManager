@@ -31,7 +31,7 @@
 	</delete>
 	<select id="selectMenuLimit" resultMap="menuResult">
 		select t1.ID, t1.parentId, t1.NAME, t1.Url, t1.NewUrl, t1.OrdIndex, t1.IsDeleteFlag, t1.CreaterId, t1.CreaterName, t1.CreateDateTime,t1.menuType,t1.issued,t1.netWork from menu t1
- 		where t1.IsDeleteFlag = 0 and t1.netWork != 1
+ 		where t1.IsDeleteFlag = 0
 	    <if test="params.parentId != null">
 			AND t1.parentId = #{params.parentId}
 		</if>
@@ -48,55 +48,52 @@
 	<select id="selectAllMenuIsDeleteFlag" resultMap="menuResult">
 		select t1.ID, t1.parentId, t1.NAME, t1.Url, t1.NewUrl, t1.OrdIndex, t1.IsDeleteFlag, t1.CreaterId, t1.CreaterName, t1.CreateDateTime,t1.menuType,t1.issued,t1.netWork from menu t1
 		<where>
-			t1.IsDeleteFlag = 0 and 
-			t1.netWork != 1
+			t1.IsDeleteFlag = 0
 		</where>
 		ORDER BY t1.OrdIndex ASC
 	</select>
 	<select id="selectAllMenu" resultMap="menuResult">
 		select t1.ID, t1.parentId, t1.NAME, t1.Url,t1.newUrl, t1.OrdIndex, t1.IsDeleteFlag, t1.CreaterId, t1.CreaterName, t1.CreateDateTime,t1.menuType,t1.issued from menu t1
 		where 
-<!-- 		t1.IsDeleteFlag = 0 and  -->
-		t1.netWork != 1
+		t1.IsDeleteFlag = 0
 		ORDER BY t1.OrdIndex ASC
 	</select>
 	<select id="findParentMenu" resultMap="menuResult">
 		select t1.ID,t1.NAME from menu t1
 		<where>
 			t1.ParentId is null 
-<!-- 			AND t1.IsDeleteFlag = 0  -->
-			AND t1.netWork != 1
+			AND t1.IsDeleteFlag = 0 
 		</where>
 		ORDER BY t1.OrdIndex ASC
 	</select>
 	<select id="selectAllMenuByRoleType" resultMap="menuResult">
 		select t1.ID, t1.parentId, t1.NAME, t1.Url, t1.NewUrl, t1.OrdIndex, t1.IsDeleteFlag, t1.CreaterId, t1.CreaterName, t1.CreateDateTime,t1.menuType,t1.issued,t1.netWork from menu t1
-		INNER JOIN (SELECT t.Menu_ID from role_menu t where netWork=2 and id in (select t3.id from Role t3 where t3.roleType = #{roleType})) t2 
-		ON t1.ID = t2.Menu_ID  AND t1.IsDeleteFlag = 0 AND = t1.netWork != 1
+		INNER JOIN (SELECT t.Menu_ID from role_menu t where id in (select t3.id from Role t3 where t3.roleType = #{roleType})) t2 
+		ON t1.ID = t2.Menu_ID  AND t1.IsDeleteFlag = 0
 		ORDER BY t1.OrdIndex ASC
 	</select>
 	<select id="selectMenuByUserInfoId" resultMap="menuResult">
 		SELECT DISTINCT t3.ID, t3.NAME, t3.Url, t3.NewUrl, t3.OrdIndex, t3.IsDeleteFlag, t3.CreaterId, t3.CreaterName, t3.CreateDateTime,t3.menuType,t3.issued,t3.netWork
 		FROM Role_UserInfo t1
-		INNER JOIN Role_Menu t2 ON t2.Role_ID = t1.Role_ID and netWork=2
+		INNER JOIN Role_Menu t2 ON t2.Role_ID = t1.Role_ID
 		INNER JOIN Menu t3 ON t3.ID = t2.Menu_ID
-		WHERE t1.UserInfo_ID = #{userInfoId} AND t3.IsDeleteFlag = 0 AND t3.parentId IS NULL AND t3.netWork != 1
+		WHERE t1.UserInfo_ID = #{userInfoId} AND t3.IsDeleteFlag = 0 AND t3.parentId IS NULL
 		ORDER BY t3.OrdIndex ASC 
 	</select>
 	<select id="selectMenuByParentId" parameterType="java.lang.Long" resultMap="menuResult">
 		<!-- SELECT t3.ID, t3.NAME, t3.Url,t3.ParentId, t3.OrdIndex, t3.IsDeleteFlag, t3.CreaterId, t3.CreaterName, t3.CreateDateTime,t3.menuType,t3.issued -->
 		SELECT DISTINCT t3.ID, t3.NAME, t3.Url, t3.NewUrl, t3.ParentId, t3.OrdIndex, t3.IsDeleteFlag, t3.CreaterId, t3.CreaterName, t3.CreateDateTime,t3.menuType,t3.issued,t3.netWork
 		FROM Role_UserInfo t1
-		INNER JOIN Role_Menu t2 ON t2.Role_ID = t1.Role_ID and netWork=2
+		INNER JOIN Role_Menu t2 ON t2.Role_ID = t1.Role_ID 
 		INNER JOIN Menu t3 ON t3.ID = t2.Menu_ID
-		WHERE t3.IsDeleteFlag = 0 AND t3.netWork != 1 AND t3.parentId = #{parentId}
+		WHERE t3.IsDeleteFlag = 0 AND t3.parentId = #{parentId}
 		ORDER BY t3.OrdIndex ASC 
 	</select>
 	<select id="getMyMenuByParentId" parameterType="java.lang.Long" resultMap="menuResult">
 		<!-- 
 		SELECT DISTINCT t3.ID, t3.NAME, t3.Url, t3.NewUrl, t3.ParentId, t3.OrdIndex, t3.IsDeleteFlag, t3.CreaterId, t3.CreaterName, t3.CreateDateTime,t3.menuType,t3.issued,t3.netWork
 		FROM Role_UserInfo t1
-		INNER JOIN Role_Menu t2 ON t2.Role_ID = t1.Role_ID and netWork=2
+		INNER JOIN Role_Menu t2 ON t2.Role_ID = t1.Role_ID 
 		INNER JOIN Menu t3 ON t3.ID = t2.Menu_ID
 		WHERE 
 		t3.IsDeleteFlag = 0 AND 
@@ -108,16 +105,15 @@
 <!-- 	根据当前一级菜单获取当前用户的二级菜单 -->
 	<select id="selectSellerMenuByUserInfoId" parameterType="menu" resultMap="menuResult">
 		SELECT DISTINCT t1.id,t1.name,t1.parentId,t1.url,t1.NewUrl, t1.OrdIndex, t1.IsDeleteFlag, t1.CreaterId, t1.CreaterName, t1.CreateDateTime,t1.menuType,t1.issued,t1.netWork 
-		FROM menu t1 LEFT JOIN role_menu t2 ON t2.Menu_ID=t1.ID AND t1.netWork=t2.netWork LEFT JOIN role_userinfo t3 ON t3.Role_ID=t2.Role_ID
-		WHERE t1.netWork=2
-		AND t3.UserInfo_ID=${createrId} AND t1.ParentId=${parentId}
+		FROM menu t1 LEFT JOIN role_menu t2 ON t2.Menu_ID=t1.ID LEFT JOIN role_userinfo t3 ON t3.Role_ID=t2.Role_ID
+		WHERE t3.UserInfo_ID=${createrId} AND t1.ParentId=${parentId}
 		ORDER BY t1.ParentId ASC, t1.OrdIndex ASC 
 	</select>
 	<select id="findAllMenuByRole" resultMap="menuResult">
 		SELECT DISTINCT t3.ID, t3.parentId, t3.NAME, t3.Url, t3.NewUrl, t3.OrdIndex, t3.IsDeleteFlag, t3.CreaterId, t3.CreaterName, t3.CreateDateTime,t3.menuType,t3.issued,t3.netWork
 		FROM Role_Menu t2 
 		INNER JOIN Menu t3 ON t3.ID = t2.Menu_ID
-		WHERE t2.Role_ID = #{roleId} AND t3.IsDeleteFlag = 0 AND t3.netWork != 1 and t2.netWork=2
+		WHERE t2.Role_ID = #{roleId} AND t3.IsDeleteFlag = 0
 		ORDER BY t3.ParentId ASC, t3.OrdIndex ASC 
 	</select>
 </mapper>

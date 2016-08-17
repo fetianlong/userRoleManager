@@ -25,13 +25,11 @@ import com.yuedi.entity.Areas;
 import com.yuedi.entity.MyPage;
 import com.yuedi.entity.Role;
 import com.yuedi.entity.RoleUserInfo;
-import com.yuedi.entity.Saler;
 import com.yuedi.entity.Seller;
 import com.yuedi.entity.UserInfo;
 import com.yuedi.service.AreasService;
 import com.yuedi.service.MenuService;
 import com.yuedi.service.RoleService;
-import com.yuedi.service.SalerService;
 import com.yuedi.service.SellerService;
 import com.yuedi.service.UserInfoService;
 import com.yuedi.util.BaiduAPI;
@@ -54,8 +52,6 @@ public class SellerController extends SupperController{
 	private RoleService roleService;
 	@Autowired
 	private UserInfoService userInfoService;
-	@Autowired
-	private SalerService salerService;
 	
 	private static final Logger logger = Logger.getLogger(RoleController.class);
 	
@@ -220,15 +216,15 @@ public class SellerController extends SupperController{
 							boolean flag = addUser(seller);	//添加用户角色
 							if(flag){
 								//给加盟商或商家3个二维码
-								Saler saler = new Saler();
-								saler.setSellerId(this.getCurrentUserFranchiseesIdId());
-								saler.setOrdIndex("1");
-								saler.setIsDeleteFlag(false);
-								saler.setCreateDateTime(new Date());
-								saler.setCreaterId(this.getCurrentUserId());
-								saler.setCreaterName(this.getCurrentUserName());
-								
-								salerService.saveSaler(saler, 3, null);
+//								Saler saler = new Saler();
+//								saler.setSellerId(this.getCurrentUserFranchiseesIdId());
+//								saler.setOrdIndex("1");
+//								saler.setIsDeleteFlag(false);
+//								saler.setCreateDateTime(new Date());
+//								saler.setCreaterId(this.getCurrentUserId());
+//								saler.setCreaterName(this.getCurrentUserName());
+//								
+//								salerService.saveSaler(saler, 3, null);
 							}
 						}
 					}

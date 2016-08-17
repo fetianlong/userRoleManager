@@ -25,7 +25,7 @@ $(document).ready(function () {
     </div><!-- breadcrumbs -->
     <!--添加页面-->
     <div class="form_default" style="margin-left:16px; margin-top:20px;width: ">
-    <form id="menu" action="${ctx}/menu/addMenu" method="post">
+    <form id="menu" action="${ctx}/menu/${action}" method="post">
         <fieldset>
             <legend>${param.titleName}</legend>
             <p>
@@ -53,12 +53,13 @@ $(document).ready(function () {
              <p>
                 <label for="email" style="float:left;">状态</label>
                 <select name="isDeleteFlag">
-                 	<option value="">-----请选择-----</option>
+<!--                  	<option value="">-----请选择-----</option> -->
                  	<option value="false" <c:if test="${menu.isDeleteFlag eq false}">selected="selected"</c:if>>正常</option>
 					<option value="true" <c:if test="${menu.isDeleteFlag eq true}">selected="selected"</c:if>>冻结</option>
                  </select>
             </p>
-             <p>
+            <%-- 
+            <p>
                 <label for="email" style="float:left;">菜单类型</label>
                 <select name="menuType">
                  	<option value="">-----请选择-----</option>
@@ -67,7 +68,7 @@ $(document).ready(function () {
 					<option value="12" <c:if test="${menu.menuType eq 12}">selected="selected"</c:if>>共有</option>
                  </select>
             </p>
-             <p>
+            <p>
                 <label for="email" style="float:left;">是否下发</label>
                 <select name="issued">
                  	<option value="">-----请选择-----</option>
@@ -75,6 +76,7 @@ $(document).ready(function () {
 					<option value="1" <c:if test="${menu.issued eq 1}">selected="selected"</c:if>>否</option>
                </select>
             </p>
+             --%>
           	<input type="hidden" value="${parentId}" name="parentParamId" id="parentId"/>
             <input type="hidden" value="${menu.id}" name="id"/>
             

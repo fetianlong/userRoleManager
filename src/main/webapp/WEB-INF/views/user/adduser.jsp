@@ -81,7 +81,7 @@ jQuery(document).ready(function () {
     </div><!-- breadcrumbs -->
     <!--添加页面-->
     <div class="form_default" style="margin-left:16px; margin-top:20px;width: ">
-    <form id="userInfo" action="${ctx}/userInfo/addUserInfo" method="post">
+    <form id="userInfo" action="${ctx}/userInfo/${action}" method="post">
         <fieldset>
             <legend>${param.titleName}</legend>
             
@@ -92,11 +92,11 @@ jQuery(document).ready(function () {
             </p>
             <p>
                 <label for="pwd" style="float:left;">密码</label>
-                <input type="password" id="pwd" name="pwd" value="${user.pwd}" id="password" class="sf" />
+                <input type="text" id="pwd" name="pwd" value="${user.pwd}" id="password" class="sf" />
             </p>
             <p>
                 <label for="plainPassword" style="float:left;">重复密码</label>
-                <input type="password" id="plainPassword" name="plainPassword" class="sf" />
+                <input type="text" id="plainPassword" name="plainPassword" class="sf" />
             </p>
             </c:if>
             <c:if test="${param.titleName eq '修改用户'}">
@@ -113,13 +113,13 @@ jQuery(document).ready(function () {
                 <label for="email" style="float:left;">邮箱</label>
                 <input type="text" name="email" value="${user.email}"  class="sf" />
             </p>
-             <p>
-                <label for="email" style="float:left;">加盟商</label>
-                <c:set var="franchiseesId" value="${user.franchiseesId}" />
-                <select name="franchiseesId" class="sf required">
+            <p>
+                <label for="email" style="float:left;">角色</label>
+                <select name="roleId" class="sf required">
                  	<option value="">-----请选择-----</option>
-                 	<c:forEach items="${sellerList}" var="seller">
-						<option value="${seller.id}" <c:if test="${seller.id eq franchiseesId}">selected="selected"</c:if>>${seller.name}</option>
+                 	<c:forEach items="${roleList}" var="role">
+                 		<option value="${role.id}">${role.name}</option>
+<%-- 						<option value="${role.id}" <c:if test="${role.id eq franchiseesId}">selected="selected"</c:if>>${role.name}</option> --%>
 					</c:forEach>
                  </select>
             </p>

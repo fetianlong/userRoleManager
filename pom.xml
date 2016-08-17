@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside.examples</groupId>
-	<artifactId>yuedi_web_v2.1</artifactId>
+	<artifactId>userRoleManager</artifactId>
 	<version>4.1.1-SNAPSHOT</version>
-	<name>Springside :: Example :: yuedi_web_v2.1</name>
+	<name>Springside :: Example :: userRoleManager</name>
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->

@@ -106,67 +106,66 @@ $(document).ready(function () {
 				</select>
 				<div class="sTableOptions" style="background:none; border:none; float:right; margin-right:25%; margin-top:-9px;">
 					<a id="roleSubmit" class="button" style=" margin-right:10px;"><span>查询</span></a>
-					<a id="reset" class="button"><span>重置</span></a>
+					<a id="reset" class="button"><span>重置${parentId}</span></a>
 				</div>
 				<input type="hidden" value="${parentId}" id="parentId" name="parentId"/>
 			</form> 
-        <div class="sTableOptions" style="margin-left:16px; margin-top:20px;">
-            <a id="deleteRole" class="button delete"><span>删除</span></a>
-            <a id="assignButton" href="" class="iconlink2" style="float:right;margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/tag.png" class="mgright5" alt=""> <span>分配按钮</span></a>
-            <a id="assignMenu" href="" class="iconlink2" style="float:right;margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/check.png" class="mgright5" alt=""> <span>分配菜单</span></a>
-            <a id="assignUserInfo" href="" class="iconlink2" style="float:right;margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/check.png" class="mgright5" alt=""> <span>分配用户</span></a>
-            <a id="updateRole" href="" class="iconlink2" style="float:right;margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/edit.png" class="mgright5" alt=""> <span>修改</span></a>
-            <a href="${ctx}/role/add?titleName=新增角色" class="iconlink2" style="float:right; margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/plus.png" class="mgright5" alt=""> <span>新增</span></a>     
-        </div><!--sTableOptions-->
-        
-        <div id="listview" class="sTableWrapper" style=" margin-left:16px;">       
-            <table cellpadding="0" cellspacing="0" class="sTableHead" width="100%" style="text-align:center;">
-                <colgroup>
-                    <col class="head0" width="3%" />
-                    <col class="head1" width="10%" />
-                    <col class="head0" width="20%" />
-                    <col class="head1" width="10%" />
-                    <col class="head0" width="10%" />
-                </colgroup>
-                <tr>
-                    <td width="3%" align="center"><input type="checkbox" class="checkall" /></td>
-                    <td width="10%">名称</td>
-					<td width="20%">创建人</td>
-					<td width="10%">说明</td>
-					<td width="10%">状态</td>
-                </tr>
-            </table>
-         </div>
-         <div class="sTableWrapper" style=" margin-left:16px;">
-			<table cellpadding="0" cellspacing="0" class="sTable" width="100%" style=" text-align:center;">
-				<colgroup>
-					<col class="con0" width="3%" />
-					<col class="con1" width="10%" />
-					<col class="con0" width="20%" />
-					<col class="con1" width="10%" />
-					<col class="con0" width="10%" />
-				</colgroup>
-			  <c:forEach items="${roleList}" var="role">
-			  	<tr>
-					<td><input id="roleChecked" name="" type="checkbox" value="${role.id}" title="${role.name}"/></td>
-					<td>${role.name}</td>
-					<td>${role.createrName}</td>
-					<td>${role.remark}</td>
-					<td>
-					 <c:if test="${role.isDeleteFlag eq false}">有效</c:if>
-		             <c:if test="${role.isDeleteFlag eq true}">无效</c:if>
-					</td>
-				</tr>
-			  </c:forEach>
-				
-			</table>
-        </div>
-        <tags:pagination page="${pageData}" paginationSize="10"/>
-    </div>
+	        <div class="sTableOptions" style="margin-left:16px; margin-top:20px;">
+	            <a id="deleteRole" class="button delete"><span>删除</span></a>
+	            <a id="assignButton" href="" class="iconlink2" style="float:right;margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/tag.png" class="mgright5" alt=""> <span>分配按钮</span></a>
+	            <a id="assignMenu" href="" class="iconlink2" style="float:right;margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/check.png" class="mgright5" alt=""> <span>分配菜单</span></a>
+	            <a id="assignUserInfo" href="" class="iconlink2" style="float:right;margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/check.png" class="mgright5" alt=""> <span>分配用户</span></a>
+	            <a id="updateRole" href="" class="iconlink2" style="float:right;margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/edit.png" class="mgright5" alt=""> <span>修改</span></a>
+	            <a href="${ctx}/role/add?titleName=新增角色&parentId=${parentId}" class="iconlink2" style="float:right; margin-right:10px;"><img src="${ctx}/demo/images/icons/small/black/plus.png" class="mgright5" alt=""> <span>新增</span></a>     
+	        </div><!--sTableOptions-->
+	        
+	        <div id="listview" class="sTableWrapper" style=" margin-left:16px;">       
+	            <table cellpadding="0" cellspacing="0" class="sTableHead" width="100%" style="text-align:center;">
+	                <colgroup>
+	                    <col class="head0" width="3%" />
+	                    <col class="head1" width="10%" />
+	                    <col class="head0" width="20%" />
+	                    <col class="head1" width="10%" />
+	                    <col class="head0" width="10%" />
+	                </colgroup>
+	                <tr>
+	                    <td width="3%" align="center"><input type="checkbox" class="checkall" /></td>
+	                    <td width="10%">名称</td>
+						<td width="20%">创建人</td>
+						<td width="10%">说明</td>
+						<td width="10%">状态</td>
+	                </tr>
+	            </table>
+	         </div>
+	         <div class="sTableWrapper" style=" margin-left:16px;">
+				<table cellpadding="0" cellspacing="0" class="sTable" width="100%" style=" text-align:center;">
+					<colgroup>
+						<col class="con0" width="3%" />
+						<col class="con1" width="10%" />
+						<col class="con0" width="20%" />
+						<col class="con1" width="10%" />
+						<col class="con0" width="10%" />
+					</colgroup>
+				  <c:forEach items="${roleList}" var="role">
+				  	<tr>
+						<td><input id="roleChecked" name="" type="checkbox" value="${role.id}" title="${role.name}"/></td>
+						<td>${role.name}</td>
+						<td>${role.createrName}</td>
+						<td>${role.remark}</td>
+						<td>
+						 <c:if test="${role.isDeleteFlag eq false}">有效</c:if>
+			             <c:if test="${role.isDeleteFlag eq true}">无效</c:if>
+						</td>
+					</tr>
+				  </c:forEach>
+					
+				</table>
+	        </div>
+	        <tags:pagination page="${pageData}" paginationSize="10"/>
+	    </div>
+    	<br clear="all" />
     
-    <br clear="all" />
-    
-</div><!--maincontent-->
+	</div><!--maincontent-->
 <br />
 	
 </body>

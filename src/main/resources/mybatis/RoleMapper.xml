@@ -37,6 +37,10 @@
 	    </where>
 		order by IsDeleteFlag
 	</select>
+	<select id="selectAllRole" resultMap="roleResult">
+		SELECT ID,NAME, Remark, IsDeleteFlag, CreaterId, CreaterName, CreateDateTime,roleType FROM role r
+		where r.IsDeleteFlag = 0 order by id desc
+	</select>
 	<select id="selectRoleById" resultMap="roleResult">
 		SELECT ID,NAME, Remark, IsDeleteFlag, CreaterId, CreaterName, CreateDateTime,roleType FROM role where id=#{id}
 	</select>

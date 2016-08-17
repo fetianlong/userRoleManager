@@ -227,7 +227,7 @@
 		    SELECT t1.ID, t1.Role_ID, t1.UserInfo_ID, t2.UserName, t3.Name AS franchiseesName
 			FROM role_userinfo t1
 			INNER JOIN userInfo t2 ON t2.ID = t1.UserInfo_ID
-			LEFT JOIN franchisees t3 ON t3.ID = t2.Franchisees_ID
+			LEFT JOIN seller t3 ON t3.ID = t2.Franchisees_ID
 			WHERE t1.Role_ID = #{roleId} AND t2.UserType <> 1
 		]]>
 	</select>

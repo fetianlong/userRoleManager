@@ -13,11 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.Encodes;
 
-import com.yuedi.dao.OrderManagementMechDao;
 import com.yuedi.dao.UserInfoDao;
-import com.yuedi.entity.IpLoginLog;
 import com.yuedi.entity.MyPage;
-import com.yuedi.entity.OrderManagementMech;
+import com.yuedi.entity.RoleUserInfo;
 import com.yuedi.entity.UserInfo;
 
 
@@ -35,12 +33,10 @@ public class UserInfoService {
 	public static final int HASH_INTERATIONS = 1024;
 	private static final int SALT_SIZE = 8;
 	
-	private static Logger logger = LoggerFactory.getLogger(UserInfoService.class);
-	
 	private UserInfoDao userInfoDao;
 	
 	@Autowired
-	OrderManagementMechDao orderManagementMechDao;
+	RoleService roleService;
 	
 	@Autowired
 	public void setUserInfoDao(UserInfoDao userInfoDao) {
@@ -103,7 +99,14 @@ public class UserInfoService {
 
 	public int saveUserInfo(UserInfo user) {
 		entryptPassword(user);
-		return userInfoDao.insertUserInfo(user);
+		Integer userId = userInfoDao.insertUserInfo(user);
+		
+		RoleUserInfo ruinfo = new RoleUserInfo();
+		ruinfo .setRoleId(user.getRoleId().longValue());
+		ruinfo.setUserInfoId(userId.longValue());
+		roleService.assignUserToRole(ruinfo);
+		
+		return userId;
 	}
 
 
@@ -139,11 +142,11 @@ public class UserInfoService {
 	 * 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
 	 */
 	private void entryptPassword(UserInfo user) {
-		byte[] salt = Digests.generateSalt(8);
+		byte[] salt = Digests.generateSalt(SALT_SIZE);
 		
 		user.setSalt(Encodes.encodeHex(salt));
 
-		byte[] hashPassword = Digests.sha1(user.getPlainPassword().getBytes(), salt, 1024);
+		byte[] hashPassword = Digests.sha1(user.getPlainPassword().getBytes(), salt, HASH_INTERATIONS);
 		user.setPwd(Encodes.encodeHex(hashPassword));
 	}
 	
@@ -159,24 +162,4 @@ public class UserInfoService {
 		return userInfoDao.queryUserSaler(sellerId);
 	}
 	
-	public List<UserInfo> queryUserBySellerId(Long sellerId) {
-		return userInfoDao.queryUserBySellerId(sellerId);
-	}
-	
-	public List<UserInfo> selectAllUserInfo(Long sellerId) {
-		return userInfoDao.selectAllUserInfo(sellerId);
-	}
-
-
-	public int insertOrderManagementMech(OrderManagementMech od) {
-		return orderManagementMechDao.insertOrderManagementMech(od);
-	}
-
-	public OrderManagementMech selectOrderManagementMech(String orderId){
-		return orderManagementMechDao.selectOrderManagementMech(orderId);
-	}
-
-	public int updateOrderManagementMech(OrderManagementMech od) {
-		return orderManagementMechDao.updateByPrimaryKeySelective(od);
-	}
 }

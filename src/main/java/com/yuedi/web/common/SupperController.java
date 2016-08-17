@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.yuedi.entity.Menu;
-import com.yuedi.entity.Seller;
 import com.yuedi.service.MenuService;
-import com.yuedi.service.SellerService;
 import com.yuedi.shiro.ShiroDbRealm.ShiroUser;
 
 @Controller
@@ -24,9 +22,6 @@ public class SupperController {
 	@Autowired
 	private MenuService menuService;
 	
-	@Autowired
-	private SellerService sellerService;
-
 	private Long nowSize = 0L;
 	/**
 	 * 资源文件存储目录

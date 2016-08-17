@@ -34,7 +34,7 @@ $(document).ready(function () {
     </div><!-- breadcrumbs -->
     <!--添加页面-->
     <div class="form_default" style="margin-left:16px; margin-top:20px;width: ">
-    <form id="userInfo" action="${ctx}/role/addRole" method="post">
+    <form id="userInfo" action="${ctx}/role/${action}" method="post">
         <fieldset>
             <legend>${param.titleName}</legend>
             <p>
@@ -45,7 +45,7 @@ $(document).ready(function () {
                 <label for="email" style="float:left;">说明</label>
                 <textarea name="remark" class="mf" cols="" rows="">${role.remark}</textarea>
             </p>
-          	<input type="hidden" value="${parentId}" name="parentParamId" id="parentId"/>
+          	<input type="hidden" value="${parentId}" name="parentId" id="parentId"/>
             <input type="hidden" value="${role.id}" name="id"/>
             
             <p>

@@ -36,6 +36,7 @@ public class UserInfo implements Serializable {
     private String plainPassword;
     
     private Integer parentId;
+    private Integer roleId;
     
     private String resetPwdFlag;
     
@@ -294,5 +295,11 @@ public class UserInfo implements Serializable {
 	}
 	public void setNewpassword(String newpassword) {
 		this.newpassword = newpassword;
+	}
+	public Integer getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 }

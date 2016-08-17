@@ -24,6 +24,7 @@ import com.yuedi.entity.Role;
 import com.yuedi.entity.RolePermission;
 import com.yuedi.entity.RoleUserInfo;
 import com.yuedi.entity.UserInfo;
+import com.yuedi.log.SystemControllerLog;
 import com.yuedi.service.MenuService;
 import com.yuedi.service.PermissionService;
 import com.yuedi.service.RoleService;
@@ -96,33 +97,38 @@ public class RoleController extends SupperController{
 		/*List<Menu> menuList = this.getFirstMenuByUserId();
 		model.addAttribute("menuList", menuList);*/
 		String parentId = request.getParameter("parentId");
+		model.addAttribute("action", "addRole");
+		if(org.springframework.util.StringUtils.isEmpty(parentId)){
+			parentId = "1";
+		}
 		model.addAttribute("parentId", parentId);
 		return "role/roleForm";
 	}
 	
+	@SystemControllerLog(description = "新增角色")
 	@RequestMapping(value="addRole",method=RequestMethod.POST)
 	public String addRole(Model model, @ModelAttribute("form") Role role) {
-		try{
-			if(role.getId() == null) {
-				if(!StringUtils.isEmpty(role.getName())) {
-					role.setCreaterId(this.getCurrentUserId());
-					role.setCreateDateTime(new Date());
-					String userName = this.getCurrentUserName();
-					role.setCreaterName(userName);
-					role.setIsDeleteFlag(false);
-					roleService.addRole(role);
-				}
-			}else {
-				if(!StringUtils.isEmpty(role.getName())) {
-					role.setCreaterId(this.getCurrentUserId());
-					role.setCreateDateTime(new Date());
-					role.setCreaterName(this.getCurrentUserName());
-					role.setIsDeleteFlag(false);
-					roleService.updateRole(role);
-				}
-			}
-		}catch(Exception e) {
-			logger.error("UserInfoController err addRole", e);
+		if(!StringUtils.isEmpty(role.getName())) {
+			role.setCreaterId(this.getCurrentUserId());
+			role.setCreateDateTime(new Date());
+			String userName = this.getCurrentUserName();
+			role.setCreaterName(userName);
+			role.setIsDeleteFlag(false);
+			
+			roleService.addRole(role);
+		}
+		return "redirect:/role/list/" + role.getParentId();
+	}
+	
+	@SystemControllerLog(description = "修改角色信息")
+	@RequestMapping(value="updateRole",method=RequestMethod.POST)
+	public String updateRole(Model model, @ModelAttribute("form") Role role) {
+		if(!StringUtils.isEmpty(role.getName())) {
+			role.setCreaterId(this.getCurrentUserId());
+			role.setCreateDateTime(new Date());
+			role.setCreaterName(this.getCurrentUserName());
+			role.setIsDeleteFlag(false);
+			roleService.updateRole(role);
 		}
 		
 		return "redirect:/role/list/" + role.getParentId();
@@ -133,9 +139,8 @@ public class RoleController extends SupperController{
 		try{
 			String parentId = request.getParameter("parentId");
 			model.addAttribute("parentId", parentId);
-			//获取当前用户所拥有的菜单
-			/*List<Menu> menuList = this.getFirstMenuByUserId();
-			model.addAttribute("menuList", menuList);*/
+			model.addAttribute("action", "updateRole");
+			
 			Role role = roleService.getRoleById(id);
 			model.addAttribute("role", role);
 		}catch(Exception e) {
@@ -170,9 +175,7 @@ public class RoleController extends SupperController{
 		String parentId = request.getParameter("parentId");
 		model.addAttribute("parentId", parentId);
 		model.addAttribute("roleId", id);
-		//获取当前用户所拥有的菜单
-		/*List<Menu> menuList = this.getFirstMenuByUserId();
-		model.addAttribute("menuList", menuList);*/
+	
 		List<UserInfo> unassignUserList = userInfoService.selectUnassignUserByRoleId(id);
 		model.addAttribute("unassignUserList", unassignUserList);
 		List<UserInfo> assignUserList = userInfoService.selectAssignUserByRoleId(id);
@@ -196,6 +199,13 @@ public class RoleController extends SupperController{
 		return "role/assignButton";
 	}
 	
+	/**
+	 * 分配用户给角色
+	 * @param roleId
+	 * @param model
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="assignUserToRole/{roleId}",method=RequestMethod.GET)
 	public String assignUserToRole(@PathVariable("roleId") Long roleId,Model model,HttpServletRequest request) {
 		try{

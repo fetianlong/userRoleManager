@@ -1,15 +1,12 @@
 package com.yuedi.web.login;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -24,27 +21,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.Encodes;
 import org.springside.modules.web.MediaTypes;
 
-import com.yuedi.entity.ActionManagerment;
-import com.yuedi.entity.Areas;
-import com.yuedi.entity.IpLoginLog;
 import com.yuedi.entity.Menu;
-import com.yuedi.entity.MyPage;
-import com.yuedi.entity.SalerUserinfo;
-import com.yuedi.entity.Seller;
+import com.yuedi.entity.Role;
 import com.yuedi.entity.UserInfo;
-import com.yuedi.service.ActionManagermentService;
-import com.yuedi.service.AreasService;
-import com.yuedi.service.LoginLogService;
+import com.yuedi.log.SystemControllerLog;
 import com.yuedi.service.MenuService;
-import com.yuedi.service.SalerUserinfoService;
-import com.yuedi.service.SellerService;
+import com.yuedi.service.RoleService;
 import com.yuedi.service.UserInfoService;
-import com.yuedi.util.BaiduAPI;
 import com.yuedi.web.common.SupperController;
 
 /**
@@ -61,28 +48,32 @@ public class LoginController extends SupperController {
 	private static String relativePathSeller = "D:/yuedi-resource/resources/picture/shangjia";
 
 	private static final Logger logger = Logger.getLogger(LoginController.class);
-	@Autowired
-	private SellerService sellerService;
-	@Autowired
-	private ActionManagermentService actionManagermentService;
-	@Autowired
-	private SalerUserinfoService salerUserinfoService;
+
 	@Autowired
 	private MenuService menuService;
 	@Autowired
 	private UserInfoService userInfoservice;
+//	@Autowired
+//	private AreasService areasService;
+//	@Autowired
+//	private LoginLogService loginlongService;
+	
 	@Autowired
-	private AreasService areasService;
-	@Autowired
-	private LoginLogService loginlongService;
-	@Autowired
-	private HttpServletRequest request;
+	private RoleService roleService;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public String login() {
 		return "account/login";
 	}
-
+	
+	@SystemControllerLog(description = "退出系统")
+	@RequestMapping(value="/logout", method = RequestMethod.GET)
+	public String logout() {
+		SecurityUtils.getSubject().logout();
+		return "account/login";
+	}
+	
+	@SystemControllerLog(description = "登录成功")
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String loginIndex(Model model) {
 		Subject currentUser = SecurityUtils.getSubject();
@@ -94,67 +85,31 @@ public class LoginController extends SupperController {
 			session.setAttribute("menuList", menuList);
 			session.setAttribute("sellerName", getCurrentUserFranchiseesName());
 		}
-
+		
+		List<Role> roleList = roleService.findAllRole();
+		session.setAttribute("roleList", roleList);
+		
 		Calendar cal = Calendar.getInstance();// 使用日历类
 		int year = cal.get(Calendar.YEAR);// 得到年
 		int month = cal.get(Calendar.MONTH) + 1;// 得到月，因为从0开始的，所以要加1
 		int day = cal.get(Calendar.DAY_OF_MONTH);// 得到天
 		String date = year + "年" + month + "月" + day + "日";
-		int hour=cal.get(Calendar.HOUR_OF_DAY);
-		int min=cal.get(Calendar.MINUTE);
-		int second=cal.get(Calendar.SECOND);
-		String newSecond="0";
-		if (second<10) {
-			newSecond="0"+second;
-		}
-		String dateHMS = year + "年" + month + "月" + day + "日"+" "+hour+":"+min+":"+newSecond;
 		model.addAttribute("date", date);
+		
+//		int hour=cal.get(Calendar.HOUR_OF_DAY);
+//		int min=cal.get(Calendar.MINUTE);
+//		int second=cal.get(Calendar.SECOND);
+//		String newSecond="0";
+//		if (second<10) {
+//			newSecond="0"+second;
+//		}
+//		String dateHMS = year + "年" + month + "月" + day + "日"+" "+hour+":"+min+":"+newSecond;
 
 		UserInfo userInfo = userInfoservice.getUserInfoById(this.getCurrentUserId());
 		if ("1".equals(userInfo.getResetPwdFlag())) {
 			model.addAttribute("userInfo", userInfo);
 			return "home/changePwd";
 		} else {
-			// model.addAttribute("userImg", userInfo.get);
-			/*
-			 * try{ Seller seller =
-			 * sellerService.selectSellerById(this.getCurrentUserFranchiseesIdId
-			 * ()); model.addAttribute("seller", seller);
-			 * 
-			 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			 * MyPage<ActionManagerment> page = new MyPage<ActionManagerment>();
-			 * page.setSize(6); page.getParams().put("sellerId",
-			 * this.getCurrentUserFranchiseesIdId()); List<ActionManagerment>
-			 * actionManagermentList =
-			 * actionManagermentService.selectActionManagermentLimit(page);
-			 * 
-			 * model.addAttribute("actionManagermentList",
-			 * actionManagermentList); model.addAttribute("isSecondMenu", 0);
-			 * //获取二维码统计信息 MyPage<SalerUserinfo> salerUserinfoPage = new
-			 * MyPage<SalerUserinfo>(); salerUserinfoPage.setSize(6); Calendar
-			 * calendar = Calendar.getInstance(); calendar.setTime(new Date());
-			 * calendar.add(Calendar.MONTH, -1);
-			 * salerUserinfoPage.getParams().put("sellerId",
-			 * this.getCurrentUserFranchiseesIdId());
-			 * salerUserinfoPage.getParams().put("beginDateTime",
-			 * calendar.getTime());
-			 * salerUserinfoPage.getParams().put("endDateTime", new Date());
-			 * List<SalerUserinfo> salerUserinfoList =
-			 * this.salerUserinfoService.
-			 * findSalerUserinfoBySellIdAndDate(salerUserinfoPage); for(int i=0;
-			 * i<salerUserinfoList.size(); i++) { Date createDateTime =
-			 * salerUserinfoList.get(i).getCreateDateTime(); if(createDateTime
-			 * != null) { String createDateTimeString =
-			 * sdf.format(createDateTime);
-			 * salerUserinfoList.get(i).setCreateDateTimeString
-			 * (createDateTimeString); } }
-			 * model.addAttribute("salerUserinfoList", salerUserinfoList);
-			 * 
-			 * // model.addAttribute("menuList", menuList); }catch(Exception e)
-			 * { logger.error("LoginController err loginIndex", e); }
-			 */
-			// return "home/header";
-			addLoginLog(dateHMS);
 			return "home/index";
 		}
 	}
@@ -199,43 +154,12 @@ public class LoginController extends SupperController {
 	public String getIndex(Model model) {
 
 		try {
-			Seller seller = sellerService.selectSellerById(this
-					.getCurrentUserFranchiseesIdId());
-			model.addAttribute("seller", seller);
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			MyPage<ActionManagerment> page = new MyPage<ActionManagerment>();
-			page.setSize(6);
-			page.getParams().put("sellerId",
-					this.getCurrentUserFranchiseesIdId());
-			List<ActionManagerment> actionManagermentList = actionManagermentService
-					.selectActionManagermentLimit(page);
 
-			model.addAttribute("actionManagermentList", actionManagermentList);
-			model.addAttribute("isSecondMenu", 0);
-			// 获取二维码统计信息
-			MyPage<SalerUserinfo> salerUserinfoPage = new MyPage<SalerUserinfo>();
-			salerUserinfoPage.setSize(6);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(new Date());
 			calendar.add(Calendar.MONTH, -1);
-			salerUserinfoPage.getParams().put("sellerId",
-					this.getCurrentUserFranchiseesIdId());
-			salerUserinfoPage.getParams().put("beginDateTime",
-					calendar.getTime());
-			salerUserinfoPage.getParams().put("endDateTime", new Date());
-			List<SalerUserinfo> salerUserinfoList = this.salerUserinfoService
-					.findSalerUserinfoBySellIdAndDate(salerUserinfoPage);
-			for (int i = 0; i < salerUserinfoList.size(); i++) {
-				Date createDateTime = salerUserinfoList.get(i)
-						.getCreateDateTime();
-				if (createDateTime != null) {
-					String createDateTimeString = sdf.format(createDateTime);
-					salerUserinfoList.get(i).setCreateDateTimeString(
-							createDateTimeString);
-				}
-			}
-			model.addAttribute("salerUserinfoList", salerUserinfoList);
 
 		} catch (Exception e) {
 			logger.error("LoginController err loginIndex", e);
@@ -271,6 +195,7 @@ public class LoginController extends SupperController {
 		return "home/changePwd";
 	}
 
+	@ResponseBody
 	@RequestMapping(value = "/changePwd", method = RequestMethod.POST)
 	public String changePwd(Model model,
 			@ModelAttribute("form") UserInfo userInfo) {
@@ -295,12 +220,14 @@ public class LoginController extends SupperController {
 				userInfoservice.resetPwdById(userInfo);
 			} else {
 				logger.debug("密码不正确！");
+				return "{\"success\":false,\"message\":\"密码不正确\"}";
 			}
 		} catch (Exception e) {
 			logger.error("LoginController err changePwd", e);
+			return "{\"success\":false,\"message\":\"失败\"}";
 		}
-
-		return "redirect:/login/index";
+		return "{\"success\":true,\"message\":\"成功\"}";
+//		return "redirect:/login/index";
 	}
 
 	/**
@@ -333,205 +260,7 @@ public class LoginController extends SupperController {
 		return "redirect:/login/index";
 	}
 
-	@RequestMapping(value = "update", method = RequestMethod.GET)
-	public String updateForm(Model model, HttpServletRequest request) {
-		try {
-			String parentId = request.getParameter("parentId");
-			model.addAttribute("parentId", parentId);
-			// 获取当前用户所拥有的菜单
-			List<Menu> menuList = this.getFirstMenuByUserId();
-			model.addAttribute("menuList", menuList);
 
-			Seller seller = sellerService.selectSellerById(this.getCurrentUserFranchiseesIdId());
-			model.addAttribute("seller", seller);
-
-			List<Areas> areasList = areasService.findProvince();
-			model.addAttribute("areasList", areasList);
-
-			String selledcnt = request.getParameter("selledcnt");
-			model.addAttribute("selledcnt", selledcnt);
-			String sellersign = request.getParameter("sellersign");
-			model.addAttribute("sellersign", sellersign);
-
-		} catch (Exception e) {
-			logger.error("SellerController err updateForm", e);
-		}
-
-		return "home/sellerForm";
-	}
-
-	@RequestMapping(value = "addSeller", method = RequestMethod.POST)
-	public String addSeller(
-			@RequestParam(value = "file", required = false) MultipartFile file,
-			Model model, @ModelAttribute("form") Seller seller,
-			HttpServletRequest request) {
-		try {
-			if (!StringUtils.isEmpty(seller.getId().toString())
-					&& !StringUtils.isEmpty(seller.getName())
-					&& !StringUtils.isEmpty(seller.getProvince())
-					&& !StringUtils.isEmpty(seller.getCity())
-					&& !StringUtils.isEmpty(seller.getArea())) {
-				List<Areas> listsheng = areasService.findAreas(Integer.parseInt(seller.getProvince()));
-				String areassheng = listsheng.get(0).getName();
-				List<Areas> listshi = areasService.findAreas(Integer.parseInt(seller.getCity()));
-				String areasshi = listshi.get(0).getName();
-				List<Areas> listqu = areasService.findAreas(Integer
-						.parseInt(seller.getArea()));
-				String areasqu = listqu.get(0).getName();
-				String areas = areassheng + areasshi + areasqu;
-				BaiduAPI getLatAndLngByBaidu = new BaiduAPI();
-				if (seller.getOfficeAddr() != null) {
-					Object[] o = getLatAndLngByBaidu.getCoordinate(areas
-							+ seller.getOfficeAddr());
-					seller.setLongitude(new Double(o[0].toString()));// 添加经度
-					seller.setLatitude(new Double(o[1].toString()));// 添加纬度
-				}
-				seller.setObligationOrg("责任机构");// 责任机构
-				seller.setBusinessScope("经营品类");
-				seller.setIsDeleteFlag(false);
-				seller.setCharterEffectiveDate(new Date());// 营业执照有效日
-				seller.setCharterExpiredDate(new Date());// 营业执照失效日
-
-				// 上传了新的图片
-				if (file != null && file.getSize() > 0) {
-					String fileName = file.getOriginalFilename();
-					String realName = String.format("%1$s%2$s",
-							UUID.randomUUID(),
-							fileName.substring(fileName.lastIndexOf(".")));
-					seller.setImg("shangjia/" + realName);
-
-					int result = sellerService.updateSellerbyId(seller);
-					// 编辑成功，删除本地目录下之前上传的图片。
-					if (result > 0) {
-						// String path = String.format("%1$s/%2$s",
-						// request.getSession().getServletContext().getInitParameter(RESOURCE_ROOT_DIR),
-						// relativePathSeller);
-						String oldImgPath = relativePathSeller
-								+ seller.getImg();
-
-						File oldImgFile = new File(oldImgPath);
-						if (oldImgFile.exists()) {
-							oldImgFile.delete();
-						}
-					}
-				} else {
-					seller.setImg(seller.getImg());// 未上传新的图片
-					sellerService.updateSellerbyId(seller);
-				}
-			}
-
-		} catch (Exception e) {
-			logger.error("sellerController err addSeller", e);
-		}
-
-		return "redirect:/login/index";
-	}
 	
-	/**
-	 * 登录信息查询
-	 * 
-	 * @author Lam
-	 *
-	 * @date 2015年12月25日
-	 */
-	@RequestMapping(value = "/listLoginLog/{parentId}", method = RequestMethod.GET)
-	public String listCountInvitation(@PathVariable("parentId") Long parentId, Model model, @RequestParam(value = "page", defaultValue = "1") int pageNumber,HttpServletRequest request){
-		MyPage<IpLoginLog> page = new MyPage<IpLoginLog>();
-		page.setNumber(pageNumber);
-				
-		try {
-			Long fid = this.getCurrentUserFranchiseesIdId();
-			if(fid != 3){
-				page.getParams().put("pid", fid);
-			}
-			
-			String userName = request.getParameter("userName");
-			if(!StringUtils.isEmpty(userName)){
-				page.getParams().put("userName", userName);
-			}
-			model.addAttribute("userName", userName);
-			
-			String sellername = request.getParameter("sellerName");
-			if(!StringUtils.isEmpty(sellername)){
-				page.getParams().put("sellerName", sellername);
-			}
-			model.addAttribute("sellername", sellername);
-			
-			String starTime = request.getParameter("beginDateTime");
-			page.getParams().put("fmSTime", starTime);
-			model.addAttribute("beginDateTime", starTime);
-			
-			String endTime = request.getParameter("endDateTime");
-			page.getParams().put("fmETime", endTime);
-			model.addAttribute("endDateTime", endTime);
-			
-			String searchParams = null;
-			searchParams = "userName=" + userName + "&sellerName=" + sellername + "&beginDateTime=" + starTime + "&endDateTime=" + endTime;
-			if (!StringUtils.isEmpty(userName)||!StringUtils.isEmpty(sellername)||!StringUtils.isEmpty(starTime)||!StringUtils.isEmpty(endTime)) {
-				model.addAttribute("searchParams", searchParams);
-			}
-			
-			
-			List<IpLoginLog> list = loginlongService.getLoginLogList(page);
-			model.addAttribute("listCount", list);
-			model.addAttribute("pageData", page);
-			model.addAttribute("parentId", parentId);
-						
-			String titleName = "登录信息查询";
-			if(!StringUtils.isEmpty(request.getParameter("titleName"))){
-				titleName = request.getParameter("titleName");
-			}
-			model.addAttribute("titleName", titleName);
-		} catch (Exception e) {
-			logger.error("listLoginLog err queryLoginlog", e);
-		}
-		
-		return "loginlog/loginlog";
-	}
-	
-
-	/**
-	 * 记录用户登录信息
-	 * 
-	 * @param date 登录日期
-	 * 
-	 * @author Lam
-	 *
-	 * @date 2015年12月24日
-	 */
-	private void addLoginLog(String date) {
-		IpLoginLog loginLog = new IpLoginLog();
-		loginLog.setUserName(this.getCurrentUserName());// 获取登录的用户名
-		loginLog.setLoginIp(getIpAddr(request));// 获取登录者的真实IP
-		loginLog.setLoginTime(date);// 获取登录时间
-		loginLog.setSellerId(getCurrentUserFranchiseesIdId());
-		loginLog.setLoginSource("悦迪云平台");// 登录系统
-		loginLog.setCtime(new Date());
-		// 查询商家的详细信息
-		Seller sellerInfo = sellerService.selectSellerById(this.getCurrentUserFranchiseesIdId());
-		if (null != sellerInfo) {
-			loginLog.setSellerName(sellerInfo.getName());// 获取商家的名称
-		}
-		loginlongService.addLoginLog(loginLog);
-	}
-
-//	/**
-//	 * 更新用户安全退出时间
-//	 * 
-//	 * @author Lam
-//	 *
-//	 * @date 2015年12月24日
-//	 */
-//	private void updateLoginLog(String loginLogName) {
-//		System.out.println("---------"+loginLogName);
-//		List<IpLoginLog> loginLogList = loginlongService.getUserLoginLog(loginLogName);
-//		if (loginLogList.size() > 0) {
-//			IpLoginLog loginLog = new IpLoginLog();
-//			Long loginlogId = loginLogList.get(0).getId();
-//			loginLog.setId(loginlogId);
-//			loginLog.setLogoutTime(this.getCurrentDate());
-//			loginlongService.updateLoginLog(loginLog);
-//		}
-//	}
 
 }

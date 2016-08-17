@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yuedi.entity.Menu;
-import com.yuedi.entity.MyPage;
+import com.yuedi.log.SystemControllerLog;
 import com.yuedi.service.MenuService;
 import com.yuedi.web.common.SupperController;
 
@@ -72,7 +71,6 @@ public class MenuController extends SupperController{
 		return "menu/menuList";
 	}*/
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/list/{parentId}",method = RequestMethod.GET)
 	public String list(@PathVariable("parentId") Long parentId,Model model,
 			HttpServletRequest request){
@@ -134,15 +132,17 @@ public class MenuController extends SupperController{
 		model.addAttribute("menuList", menuList);*/
 		String parentId = request.getParameter("parentId");
 		model.addAttribute("parentId", parentId);
+		model.addAttribute("action", "addMenu");
 		
 		List<Menu> parentMenuList = menuService.findParentMenu();
 		model.addAttribute("parentMenuList", parentMenuList);
 		return "menu/menuForm";
 	}
 	
+	@SystemControllerLog(description = "新增菜单")
 	@RequestMapping(value="addMenu",method=RequestMethod.POST)
 	public String addMenu(Model model, @ModelAttribute("form") Menu menu) {
-		try{
+//		try{
 			if(menu.getId() == null) {
 				if(!StringUtils.isEmpty(menu.getName())) {
 					menu.setCreateDateTime(new Date());
@@ -152,19 +152,24 @@ public class MenuController extends SupperController{
 					
 					menuService.addMenu(menu);
 				}
-			}else {
-				if(!StringUtils.isEmpty(menu.getName())) {
-					menu.setCreateDateTime(new Date());
-					menu.setCreaterId(this.getCurrentUserId());
-					menu.setCreaterName(this.getCurrentUserName());
-					
-					menuService.updateMenu(menu);
-				}
 			}
-		}catch(Exception e) {
-			logger.error("MenuController err addMenu", e);
-		}
+//		}catch(Exception e) {
+//			logger.error("MenuController err addMenu", e);
+//		}
 		
+		return "redirect:/menu/list/" + menu.getParentParamId();
+	}
+	
+	@SystemControllerLog(description = "修改菜单信息")
+	@RequestMapping(value="updateMenu",method=RequestMethod.POST)
+	public String updateMenu(Model model, @ModelAttribute("form") Menu menu) {
+		if(!StringUtils.isEmpty(menu.getName())) {
+			menu.setCreateDateTime(new Date());
+			menu.setCreaterId(this.getCurrentUserId());
+			menu.setCreaterName(this.getCurrentUserName());
+			
+			menuService.updateMenu(menu);
+		}
 		return "redirect:/menu/list/" + menu.getParentParamId();
 	}
 	
@@ -178,9 +183,7 @@ public class MenuController extends SupperController{
 		try{
 			String parentId = request.getParameter("parentId");
 			model.addAttribute("parentId", parentId);
-			//获取当前用户所拥有的菜单
-			/*List<Menu> menuList = this.getFirstMenuByUserId();
-			model.addAttribute("menuList", menuList);*/
+			model.addAttribute("action", "updateMenu");
 			
 			Menu menu = menuService.getMenuById(id);
 			model.addAttribute("menu", menu);

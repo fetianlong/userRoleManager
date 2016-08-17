@@ -20,6 +20,7 @@ import com.yuedi.entity.Role;
 import com.yuedi.entity.RoleMenu;
 import com.yuedi.entity.RolePermission;
 import com.yuedi.entity.RoleUserInfo;
+import com.yuedi.log.SystemServiceLog;
 
 /**
  * @author sky
@@ -65,6 +66,7 @@ public class RoleService {
 	 * @author pujh  
 	 * @createtime 2015年7月15日 下午5:18:37
 	 */
+	@SystemServiceLog(description="修改权限")
 	public int updateRole(Role role) {
 		return roleDao.updateRoleById(role);
 	}
