@@ -81,9 +81,25 @@ public class RoleService {
 	 * @createtime 2015年4月15日 上午10:33:58
 	 */
 	public int deleteRoleById(Long id) {
+		if (isSupervisor(id)) {
+			throw new ServiceException("不能删除超级管理员角色");
+		}
+		
+		//删除用户角色关联关系
+		roleUserInfoDao.deleteRoleUserInfoById(id);
+		//删除角色菜单关联关系
+		roleMenuDao.deleteRoleMenuById(id);
+		//最后删除角色
 		return roleDao.deleteRoleById(id);
 	}
 
+	/**
+	 * 判断是否超级管理员.
+	 */
+	private boolean isSupervisor(Long id) {
+		return id == 1;
+	}
+	
 	/**
 	 * 获取所有角色
 	 * @return  
